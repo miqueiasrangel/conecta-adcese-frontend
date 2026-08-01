@@ -1,0 +1,126 @@
+/* GLOBAL RESPONSIVE STYLES FOR MOBILE AND DESKTOP (CONECTA ADCESE) */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: #f4f7f6;
+  color: #333;
+}
+
+/* MEDIA QUERIES FOR TABLETS & SMARTPHONES (<= 768px) */
+@media (max-width: 768px) {
+  /* CONTAINER PADDING */
+  .portal-container,
+  .secretaria-container,
+  .financeiro-container,
+  .congregacoes-container,
+  .controle-acesso-container,
+  .cultos-container,
+  .projetos-container,
+  .gabinete-container {
+    padding: 15px !important;
+  }
+
+  /* HEADERS RESPONSIVOS */
+  .portal-header,
+  .secretaria-header,
+  .financeiro-header,
+  .congregacoes-header,
+  .controle-acesso-header,
+  .cultos-header,
+  .projetos-header,
+  .gabinete-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 15px !important;
+  }
+
+  .portal-header div,
+  .secretaria-header div,
+  .financeiro-header div,
+  .congregacoes-header div,
+  .cultos-header div,
+  .projetos-header div,
+  .gabinete-header div {
+    width: 100% !important;
+  }
+
+  /* GRIDS RESPONSIVOS DE CARDS */
+  .modulos-grid,
+  .metricas-grid,
+  .metricas-grid-cultos,
+  .impacto-grid,
+  .projetos-cards-grid,
+  .visao-aguia-grid,
+  .visitas-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* CONTROLES E FILTROS */
+  .controles-bar,
+  .controles-culto-bar,
+  .filtros-bar {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .filtro-grupo {
+    width: 100% !important;
+  }
+
+  .filtro-select, .filtro-input, .busca-input {
+    width: 100% !important;
+  }
+
+  /* TABELAS RESPONSIVAS (SCROLL HORIZONTAL NO CELULAR) */
+  .tabela-container {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    width: 100% !important;
+  }
+
+  .membros-tabela {
+    min-width: 600px !important;
+  }
+
+  /* MODAIS RESPONSIVOS PARA SMARTPHONE */
+  .modal-content {
+    width: 95% !important;
+    max-width: 95% !important;
+    padding: 15px !important;
+    margin: 10px auto !important;
+    max-height: 92vh !important;
+    overflow-y: auto !important;
+  }
+
+  .form-linha {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .form-grupo {
+    width: 100% !important;
+  }
+
+  /* BOTOES DE AÇÃO EM BLOCO NO CELULAR */
+  .btn-novo, .btn-voltar, .btn-exportar {
+    width: 100% !important;
+    text-align: center !important;
+    justify-content: center !important;
+  }
+
+  .gabinete-tabs {
+    flex-direction: column !important;
+    gap: 5px !important;
+  }
+
+  .tab-btn {
+    width: 100% !important;
+    border-radius: 6px !important;
+  }
+}
