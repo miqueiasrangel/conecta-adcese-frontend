@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
+import ActionMenu from '../../components/ActionMenu/ActionMenu';
+import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import '../Secretaria/Secretaria.css';
 import './Projetos.css';
 
@@ -432,20 +434,10 @@ function Projetos() {
                   <button onClick={() => abrirModalAtendimento(proj)} className="btn-card-acao btn-atendimento">
                     🤝 Atender Família
                   </button>
-                  <button 
-                    onClick={() => { setFormProjeto(proj); setModalProjetoAberto(true); }}
-                    style={{ background: '#f1f5f9', border: '1px solid #cbd5e1', cursor: 'pointer', padding: '8px', borderRadius: '6px' }}
-                    title="Editar Projeto"
-                  >
-                    ✏️
-                  </button>
-                  <button 
-                    onClick={() => deletarProjeto(proj.id)}
-                    style={{ background: '#f1f5f9', border: '1px solid #cbd5e1', cursor: 'pointer', padding: '8px', borderRadius: '6px' }}
-                    title="Excluir Projeto"
-                  >
-                    🗑️
-                  </button>
+                  <ActionMenu actions={[
+                    { label: 'Editar Projeto', icon: <FaEdit />, onClick: () => { setFormProjeto(proj); setModalProjetoAberto(true); } },
+                    { label: 'Excluir Projeto', icon: <FaTrashAlt />, danger: true, onClick: () => deletarProjeto(proj.id) },
+                  ]} />
                 </div>
               </div>
             );

@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
+import ActionMenu from '../../components/ActionMenu/ActionMenu';
+import { FaIdCard, FaFileAlt, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import './Secretaria.css';
 
 function Secretaria() {
@@ -359,7 +361,7 @@ function Secretaria() {
                   <th>Cargo / Função</th>
                   <th>Telefone</th>
                   <th>Status</th>
-                  <th style={{ textAlign: 'center', width: '160px' }}>Ações</th>
+                  <th style={{ textAlign: 'center', width: '60px' }}></th>
                 </tr>
               </thead>
               <tbody>
@@ -390,34 +392,12 @@ function Secretaria() {
                       </span>
                     </td>
                     <td style={{ textAlign: 'center' }}>
-                      <button 
-                        onClick={() => abrirModalCarteirinha(membro)} 
-                        style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.1rem', marginRight: '6px' }}
-                        title="Imprimir Carteirinha / Credencial de Membro"
-                      >
-                        🪪
-                      </button>
-                      <button 
-                        onClick={() => abrirModalDocumento(membro)} 
-                        style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.1rem', marginRight: '6px' }}
-                        title="Emitir Cartas / Certificados"
-                      >
-                        📜
-                      </button>
-                      <button 
-                        onClick={() => abrirModalEdicao(membro)} 
-                        style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.1rem', marginRight: '6px' }}
-                        title="Editar Membro"
-                      >
-                        ✏️
-                      </button>
-                      <button 
-                        onClick={() => handleExcluirMembro(membro)} 
-                        style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.1rem' }}
-                        title="Excluir Membro"
-                      >
-                        🗑️
-                      </button>
+                      <ActionMenu actions={[
+                        { label: 'Credencial / Crachá', icon: <FaIdCard />, onClick: () => abrirModalCarteirinha(membro) },
+                        { label: 'Emitir Documentos', icon: <FaFileAlt />, onClick: () => abrirModalDocumento(membro) },
+                        { label: 'Editar Membro', icon: <FaEdit />, onClick: () => abrirModalEdicao(membro) },
+                        { label: 'Excluir Membro', icon: <FaTrashAlt />, danger: true, onClick: () => handleExcluirMembro(membro) },
+                      ]} />
                     </td>
                   </tr>
                 ))}

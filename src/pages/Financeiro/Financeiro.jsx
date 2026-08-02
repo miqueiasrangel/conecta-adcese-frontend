@@ -5,6 +5,8 @@ import '../Secretaria/Secretaria.css';
 import './Financeiro.css';
 
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
+import ActionMenu from '../../components/ActionMenu/ActionMenu';
+import { FaTrashAlt } from 'react-icons/fa';
 
 function Financeiro() {
   const dataAtual = new Date();
@@ -534,7 +536,7 @@ function Financeiro() {
                 <th>Forma de Pagamento</th>
                 <th>Registrado Por</th>
                 <th style={{ textAlign: 'right' }}>Valor do Dízimo</th>
-                <th>Ações</th>
+                <th style={{ width: '60px', textAlign: 'center' }}></th>
               </tr>
             </thead>
             <tbody>
@@ -555,8 +557,10 @@ function Financeiro() {
                   <td style={{ textAlign: 'right', fontWeight: 'bold', color: '#28a745' }}>
                     + {formatarMoeda(item.valor)}
                   </td>
-                  <td>
-                    <button onClick={() => deletarLancamento(item.id)} className="btn-deletar" title="Excluir">🗑️</button>
+                  <td style={{ textAlign: 'center' }}>
+                    <ActionMenu actions={[
+                      { label: 'Excluir Lançamento', icon: <FaTrashAlt />, danger: true, onClick: () => deletarLancamento(item.id) },
+                    ]} />
                   </td>
                 </tr>
               ))}
@@ -609,7 +613,7 @@ function Financeiro() {
                       <th>Categoria</th>
                       <th>Forma Pagto</th>
                       <th style={{ textAlign: 'right' }}>Valor</th>
-                      <th>Ações</th>
+                      <th style={{ width: '60px', textAlign: 'center' }}></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -623,8 +627,10 @@ function Financeiro() {
                         <td style={{ textAlign: 'right', fontWeight: 'bold', color: '#dc3545' }}>
                           - {formatarMoeda(item.valor)}
                         </td>
-                        <td>
-                          <button onClick={() => deletarLancamento(item.id)} className="btn-deletar" title="Excluir">🗑️</button>
+                        <td style={{ textAlign: 'center' }}>
+                          <ActionMenu actions={[
+                            { label: 'Excluir Lançamento', icon: <FaTrashAlt />, danger: true, onClick: () => deletarLancamento(item.id) },
+                          ]} />
                         </td>
                       </tr>
                     ))}
@@ -646,7 +652,7 @@ function Financeiro() {
                 <th>Membro / Favorecido</th>
                 <th>Registrado por</th>
                 <th>Valor</th>
-                <th>Ações</th>
+                <th style={{ width: '60px', textAlign: 'center' }}></th>
               </tr>
             </thead>
             <tbody>
@@ -677,14 +683,10 @@ function Financeiro() {
                   <td className={item.tipo === 'ENTRADA' ? 'valor-entrada' : 'valor-saida'}>
                     {item.tipo === 'ENTRADA' ? `+ ${formatarMoeda(item.valor)}` : `- ${formatarMoeda(item.valor)}`}
                   </td>
-                  <td>
-                    <button
-                      onClick={() => deletarLancamento(item.id)}
-                      className="btn-deletar"
-                      title="Excluir Lançamento"
-                    >
-                      🗑️
-                    </button>
+                  <td style={{ textAlign: 'center' }}>
+                    <ActionMenu actions={[
+                      { label: 'Excluir Lançamento', icon: <FaTrashAlt />, danger: true, onClick: () => deletarLancamento(item.id) },
+                    ]} />
                   </td>
                 </tr>
               ))}

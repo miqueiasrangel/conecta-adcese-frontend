@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
+import ActionMenu from '../../components/ActionMenu/ActionMenu';
+import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import '../Secretaria/Secretaria.css'; 
 
 
@@ -131,7 +133,7 @@ function Congregacoes() {
                 <th>Nome da Congregação</th>
                 <th>Dirigente / Responsável</th>
                 <th>Endereço</th>
-                <th style={{ width: '120px', textAlign: 'center' }}>Ações</th>
+                <th style={{ width: '60px', textAlign: 'center' }}></th>
               </tr>
             </thead>
             <tbody>
@@ -141,20 +143,10 @@ function Congregacoes() {
                   <td>{cong.dirigente ? `${cong.dirigente.nome} (${cong.dirigente.cargo})` : 'Sem dirigente'}</td>
                   <td>{cong.endereco}</td>
                   <td style={{ textAlign: 'center' }}>
-                    <button 
-                      onClick={() => abrirModalEditar(cong)} 
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.1rem', marginRight: '8px' }}
-                      title="Editar Congregação"
-                    >
-                      ✏️
-                    </button>
-                    <button 
-                      onClick={() => handleExcluir(cong)} 
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.1rem' }}
-                      title="Excluir Congregação"
-                    >
-                      🗑️
-                    </button>
+                    <ActionMenu actions={[
+                      { label: 'Editar Congregação', icon: <FaEdit />, onClick: () => abrirModalEditar(cong) },
+                      { label: 'Excluir Congregação', icon: <FaTrashAlt />, danger: true, onClick: () => handleExcluir(cong) },
+                    ]} />
                   </td>
                 </tr>
               ))}

@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
+import ActionMenu from '../../components/ActionMenu/ActionMenu';
+import { FaUserFriends, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import '../Secretaria/Secretaria.css';
 import './Cultos.css';
 
@@ -465,8 +467,7 @@ function Cultos() {
                   <th>Tipo e Local</th>
                   <th>Preletor e Tema</th>
                   <th>Hinos da Harpa</th>
-                  <th>Escala de Equipes</th>
-                  <th>Ações</th>
+                  <th style={{ width: '60px', textAlign: 'center' }}></th>
                 </tr>
               </thead>
               <tbody>
@@ -495,23 +496,12 @@ function Cultos() {
                         👥 Escalar ({culto.escalados ? culto.escalados.length : 0})
                       </button>
                     </td>
-                    <td>
-                      <div style={{ display: 'flex', gap: '6px' }}>
-                        <button 
-                          onClick={() => { setFormCulto(culto); setModalCultoAberto(true); }} 
-                          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.1rem' }} 
-                          title="Editar Liturgia"
-                        >
-                          ✏️
-                        </button>
-                        <button 
-                          onClick={() => deletarCulto(culto.id)} 
-                          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.1rem' }} 
-                          title="Excluir Culto"
-                        >
-                          🗑️
-                        </button>
-                      </div>
+                    <td style={{ textAlign: 'center' }}>
+                      <ActionMenu actions={[
+                        { label: `Escalar Equipes (${culto.escalados ? culto.escalados.length : 0})`, icon: <FaUserFriends />, onClick: () => abrirModalEscalar(culto) },
+                        { label: 'Editar Liturgia', icon: <FaEdit />, onClick: () => { setFormCulto(culto); setModalCultoAberto(true); } },
+                        { label: 'Excluir Culto', icon: <FaTrashAlt />, danger: true, onClick: () => deletarCulto(culto.id) },
+                      ]} />
                     </td>
                   </tr>
                 ))}

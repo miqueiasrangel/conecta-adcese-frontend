@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
+import ActionMenu from '../../components/ActionMenu/ActionMenu';
+import { FaTrashAlt, FaUser } from 'react-icons/fa';
 import './ControleAcesso.css';
 
 function ControleAcesso() {
@@ -162,14 +164,10 @@ function ControleAcesso() {
                 onClick={() => selecionarUsuario(user)}
                 className={`usuario-item ${usuarioSelecionado?.id === user.id ? 'selecionado' : ''}`}
               >
-                <span className="usuario-info">👤 {user.login}</span>
-                <button 
-                  onClick={(e) => handleExcluirUsuario(user, e)} 
-                  className="btn-excluir-user"
-                  title="Excluir Usuário"
-                >
-                  🗑️
-                </button>
+                <span className="usuario-info"><FaUser style={{ color: '#003366' }} /> {user.login}</span>
+                <ActionMenu actions={[
+                  { label: 'Excluir Usuário', icon: <FaTrashAlt />, danger: true, onClick: () => handleExcluirUsuario(user, { stopPropagation: () => {} }) },
+                ]} />
               </li>
             ))}
           </ul>

@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
+import ActionMenu from '../../components/ActionMenu/ActionMenu';
+import { FaCheckCircle } from 'react-icons/fa';
 import '../Secretaria/Secretaria.css';
 import './Gabinete.css';
 
@@ -485,7 +487,7 @@ function Gabinete() {
                     <th>Data Reavaliação</th>
                     <th>Orientações Pastorais</th>
                     <th>Status</th>
-                    <th>Ações</th>
+                    <th style={{ width: '60px', textAlign: 'center' }}></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -500,14 +502,13 @@ function Gabinete() {
                           {d.status}
                         </span>
                       </td>
-                      <td>
-                        {d.status !== 'Reintegrado' && (
-                          <button 
-                            onClick={() => reintegrarMembro(d)}
-                            style={{ backgroundColor: '#28a745', color: 'white', border: 'none', padding: '6px 12px', borderRadius: '5px', fontWeight: 'bold', cursor: 'pointer', fontSize: '0.8rem' }}
-                          >
-                            🕊️ Reintegrar à Comunhão
-                          </button>
+                      <td style={{ textAlign: 'center' }}>
+                        {d.status !== 'Reintegrado' ? (
+                          <ActionMenu actions={[
+                            { label: 'Reintegrar à Comunhão', icon: <FaCheckCircle />, onClick: () => reintegrarMembro(d) },
+                          ]} />
+                        ) : (
+                          <span style={{ color: '#94a3b8', fontSize: '0.8rem' }}>-</span>
                         )}
                       </td>
                     </tr>
