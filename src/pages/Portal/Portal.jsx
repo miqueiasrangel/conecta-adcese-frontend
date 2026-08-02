@@ -74,9 +74,42 @@ function Portal() {
     });
   }, [navigate]);
 
-  const RenderizarIcone = ({ nomeIcone }) => {
-    const IconeComponente = FaIcons[nomeIcone];
-    return IconeComponente ? <IconeComponente /> : <FaChurch />;
+  const RenderizarIcone = ({ modulo }) => {
+    if (!modulo) return <FaChurch />;
+
+    // 1. Se 'icone' for o nome exato de um componente do FaIcons (ex: FaUsers, FaCoins)
+    if (modulo.icone && FaIcons[modulo.icone]) {
+      const IconeComp = FaIcons[modulo.icone];
+      return <IconeComp />;
+    }
+
+    // 2. Mapeamento dinâmico inteligente baseado na rota ou título do módulo
+    const rota = modulo.rota || '';
+    const titulo = (modulo.titulo || '').toLowerCase();
+
+    if (rota === '/secretaria' || rota === '/membros' || titulo.includes('secretaria') || titulo.includes('membro')) {
+      return <FaIcons.FaUsers />;
+    }
+    if (rota === '/financeiro' || titulo.includes('financeir') || titulo.includes('dízimo') || titulo.includes('oferta')) {
+      return <FaIcons.FaCoins />;
+    }
+    if (rota === '/cultos' || titulo.includes('culto') || titulo.includes('escala')) {
+      return <FaIcons.FaCalendarAlt />;
+    }
+    if (rota === '/congregacoes' || titulo.includes('congrega')) {
+      return <FaIcons.FaBuilding />;
+    }
+    if (rota === '/projetos' || titulo.includes('projeto') || titulo.includes('missã') || titulo.includes('missao')) {
+      return <FaIcons.FaHandHoldingHeart />;
+    }
+    if (rota === '/gabinete' || titulo.includes('gabinete') || titulo.includes('pastoral')) {
+      return <FaIcons.FaBookOpen />;
+    }
+    if (rota === '/controle-acesso' || titulo.includes('controle') || titulo.includes('acesso')) {
+      return <FaIcons.FaKey />;
+    }
+
+    return <FaChurch />;
   };
 
   const listaSeguraModulos = Array.isArray(modulos) ? modulos : [];
@@ -204,7 +237,7 @@ function Portal() {
                 <div key={modulo.id} className="modulo-card">
                   <div className="modulo-top">
                     <div className="modulo-icone-wrapper">
-                      <RenderizarIcone nomeIcone={modulo.icone} />
+                      <RenderizarIcone modulo={modulo} />
                     </div>
                     <span className="modulo-status-badge">Ativo</span>
                   </div>
