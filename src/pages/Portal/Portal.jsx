@@ -80,11 +80,14 @@ function Portal() {
   };
 
   const listaSeguraModulos = Array.isArray(modulos) ? modulos : [];
+  const isAdmin = usuarioLogado.toLowerCase() === 'admin';
 
-  const modulosFiltrados = listaSeguraModulos.filter(modulo => 
-    (modulo.titulo || '').toLowerCase().includes((termoBusca || '').toLowerCase()) ||
-    (modulo.descricao || '').toLowerCase().includes((termoBusca || '').toLowerCase())
-  );
+  const modulosFiltrados = listaSeguraModulos
+    .filter(modulo => isAdmin || modulo.rota !== '/controle-acesso')
+    .filter(modulo => 
+      (modulo.titulo || '').toLowerCase().includes((termoBusca || '').toLowerCase()) ||
+      (modulo.descricao || '').toLowerCase().includes((termoBusca || '').toLowerCase())
+    );
 
   const dataAtualFormatada = new Date().toLocaleDateString('pt-BR', {
     weekday: 'long',
@@ -113,9 +116,6 @@ function Portal() {
               <FaUserCircle className="user-avatar-icon" />
               <span>Olá, <strong>{usuarioLogado}</strong></span>
             </div>
-            <button onClick={() => navigate('/controle-acesso')} className="nav-btn">
-              <FaUserCog /> Painel Admin
-            </button>
             <button onClick={() => navigate('/alterar-senha')} className="nav-btn">
               <FaKey /> Alterar Senha
             </button>

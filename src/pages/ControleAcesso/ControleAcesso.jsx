@@ -21,8 +21,14 @@ function ControleAcesso() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
+    const usuarioLogado = localStorage.getItem('usuarioLogado') || '';
     if (!token) {
       navigate('/login');
+      return;
+    }
+    if (usuarioLogado.toLowerCase() !== 'admin') {
+      alert("Acesso negado. O Controle de Acesso é exclusivo para o usuário administrador.");
+      navigate('/painel');
       return;
     }
     carregarDados();
