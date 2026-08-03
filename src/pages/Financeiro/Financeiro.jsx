@@ -198,6 +198,10 @@ function Financeiro() {
     }
   };
 
+  const usuarioLogado = localStorage.getItem('usuarioLogado') || '';
+  const loginUsuario = localStorage.getItem('loginUsuario') || '';
+  const isAdmin = usuarioLogado.toLowerCase().includes('admin') || loginUsuario.toLowerCase() === 'admin';
+
   const fecharEAtualizarModal = () => {
     setModalAberto(false);
     setItensEntrada([{ ...itemInicialEntrada }]);
@@ -206,13 +210,23 @@ function Financeiro() {
   };
 
   const deletarLancamento = (id) => {
+    if (!isAdmin) {
+      alert("Acesso negado. Apenas o usuário ADMINISTRADOR pode excluir lançamentos financeiros.");
+      return;
+    }
     if (window.confirm("Deseja realmente excluir este lançamento financeiro?")) {
       api.delete(`/lancamentos/${id}`)
         .then(() => {
           alert("Lançamento excluído com sucesso!");
           carregarDados();
         })
-        .catch(err => console.error("Erro ao excluir lançamento", err));
+        .catch(err => {
+          if (err.response && err.response.status === 403) {
+            alert("Acesso negado. Apenas o administrador tem permissão para excluir lançamentos financeiros.");
+          } else {
+            alert("Erro ao excluir lançamento. Tente novamente.");
+          }
+        });
     }
   };
 
@@ -558,9 +572,13 @@ function Financeiro() {
                     + {formatarMoeda(item.valor)}
                   </td>
                   <td style={{ textAlign: 'center' }}>
-                    <ActionMenu actions={[
-                      { label: 'Excluir Lançamento', icon: <FaTrashAlt />, danger: true, onClick: () => deletarLancamento(item.id) },
-                    ]} />
+                    {isAdmin ? (
+                      <ActionMenu actions={[
+                        { label: 'Excluir Lançamento', icon: <FaTrashAlt />, danger: true, onClick: () => deletarLancamento(item.id) },
+                      ]} />
+                    ) : (
+                      <span style={{ color: '#94a3b8', fontSize: '0.75rem' }}>-</span>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -628,9 +646,13 @@ function Financeiro() {
                           - {formatarMoeda(item.valor)}
                         </td>
                         <td style={{ textAlign: 'center' }}>
-                          <ActionMenu actions={[
-                            { label: 'Excluir Lançamento', icon: <FaTrashAlt />, danger: true, onClick: () => deletarLancamento(item.id) },
-                          ]} />
+                          {isAdmin ? (
+                            <ActionMenu actions={[
+                              { label: 'Excluir Lançamento', icon: <FaTrashAlt />, danger: true, onClick: () => deletarLancamento(item.id) },
+                            ]} />
+                          ) : (
+                            <span style={{ color: '#94a3b8', fontSize: '0.75rem' }}>-</span>
+                          )}
                         </td>
                       </tr>
                     ))}
@@ -684,9 +706,13 @@ function Financeiro() {
                     {item.tipo === 'ENTRADA' ? `+ ${formatarMoeda(item.valor)}` : `- ${formatarMoeda(item.valor)}`}
                   </td>
                   <td style={{ textAlign: 'center' }}>
-                    <ActionMenu actions={[
-                      { label: 'Excluir Lançamento', icon: <FaTrashAlt />, danger: true, onClick: () => deletarLancamento(item.id) },
-                    ]} />
+                    {isAdmin ? (
+                      <ActionMenu actions={[
+                        { label: 'Excluir Lançamento', icon: <FaTrashAlt />, danger: true, onClick: () => deletarLancamento(item.id) },
+                      ]} />
+                    ) : (
+                      <span style={{ color: '#94a3b8', fontSize: '0.75rem' }}>-</span>
+                    )}
                   </td>
                 </tr>
               ))}

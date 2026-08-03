@@ -21,6 +21,7 @@ function Login() {
         const usuario = resposta.data.nomeUsuario || login;
         localStorage.setItem('token', token);
         localStorage.setItem('usuarioLogado', usuario);
+        localStorage.setItem('loginUsuario', login);
         window.location.href = '/painel'; 
       })
       .catch(() => {

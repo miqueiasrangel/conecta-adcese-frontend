@@ -375,3 +375,20 @@ input, select, textarea {
   color: #ffffff;
 }
 
+[data-theme="dark"] .action-menu-item.danger {
+  color: #f87171 !important;
+}
+
+[data-theme="dark"] .action-menu-item.danger .action-item-icon {
+  color: #f87171 !important;
+}
+
+[data-theme="dark"] .action-menu-item.danger:hover {
+  background: rgba(239, 68, 68, 0.2) !important;
+  color: #fca5a5 !important;
+}
+
+[data-theme="dark"] .action-menu-item.danger:hover .action-item-icon {
+  color: #fca5a5 !important;
+}
+
