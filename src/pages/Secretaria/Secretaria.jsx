@@ -4,9 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
 import ActionMenu from '../../components/ActionMenu/ActionMenu';
 import { FaIdCard, FaFileAlt, FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { useToast } from '../../context/ToastContext';
 import './Secretaria.css';
 
 function Secretaria() {
+  const { showToast, showConfirm } = useToast();
   // ESTADOS PRINCIPAIS DE DADOS
   const [membros, setMembros] = useState([]);
   const [todosMembrosRelatorio, setTodosMembrosRelatorio] = useState([]);
@@ -135,7 +137,7 @@ function Secretaria() {
     const file = e.target.files[0];
     if (file) {
       if (file.size > 2 * 1024 * 1024) {
-        alert("Por favor, escolha uma imagem menor que 2MB.");
+        showToast("Por favor, escolha uma imagem menor que 2MB.", "warning");
         return;
       }
       const reader = new FileReader();
@@ -178,36 +180,40 @@ function Secretaria() {
     if (dadosFormulario.id) {
       api.put(`/membros/${dadosFormulario.id}`, dadosFormulario)
         .then(() => {
-          alert("Membro atualizado com sucesso!");
+          showToast("Membro atualizado com sucesso!", "success");
           setModalAberto(false);
           carregarMembros();
         })
-        .catch(err => alert("Erro ao atualizar membro."));
+        .catch(err => showToast("Erro ao atualizar membro.", "error"));
     } else {
       api.post('/membros', dadosFormulario)
         .then(() => {
-          alert("Membro cadastrado com sucesso!");
+          showToast("Membro cadastrado com sucesso!", "success");
           setModalAberto(false);
           carregarMembros();
         })
-        .catch(err => alert("Erro ao cadastrar membro."));
+        .catch(err => showToast("Erro ao cadastrar membro.", "error"));
     }
   };
 
   const handleExcluirMembro = (membro) => {
-    if (!window.confirm(`Tem certeza que deseja excluir o membro "${membro.nome}"?`)) {
-      return;
-    }
-
-    api.delete(`/membros/${membro.id}`)
-      .then(() => {
-        alert("Membro excluído com sucesso!");
-        carregarMembros();
-      })
-      .catch(err => {
-        console.error("Erro ao excluir membro:", err);
-        alert("Erro ao excluir membro.");
-      });
+    showConfirm({
+      titulo: 'Excluir Membro',
+      mensagem: `Tem certeza que deseja excluir o membro "${membro.nome}"? Esta ação não poderá ser desfeita.`,
+      textoConfirmar: 'Excluir Membro',
+      danger: true,
+      onConfirm: () => {
+        api.delete(`/membros/${membro.id}`)
+          .then(() => {
+            showToast("Membro excluído com sucesso!", "success");
+            carregarMembros();
+          })
+          .catch(err => {
+            console.error("Erro ao excluir membro:", err);
+            showToast("Erro ao excluir membro.", "error");
+          });
+      }
+    });
   };
 
   // FILTRAGEM LOCAL DA TABELA PRINCIPAL

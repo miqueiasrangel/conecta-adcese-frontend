@@ -4,9 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
 import ActionMenu from '../../components/ActionMenu/ActionMenu';
 import { FaTrashAlt, FaUser } from 'react-icons/fa';
+import { useToast } from '../../context/ToastContext';
 import './ControleAcesso.css';
 
 function ControleAcesso() {
+  const { showToast, showConfirm } = useToast();
   const [usuarios, setUsuarios] = useState([]);
   const [modulosTotais, setModulosTotais] = useState([]);
   const [usuarioSelecionado, setUsuarioSelecionado] = useState(null);
@@ -31,7 +33,7 @@ function ControleAcesso() {
       return;
     }
     if (!isAdmin) {
-      alert("Acesso negado. O Controle de Acesso é exclusivo para o usuário administrador.");
+      showToast("Acesso negado. O Controle de Acesso é exclusivo para o usuário administrador.", "error");
       navigate('/painel');
       return;
     }
@@ -72,12 +74,12 @@ function ControleAcesso() {
 
     api.put(`/usuarios/${usuarioSelecionado.id}/permissoes`, modulosMarcados)
       .then(() => {
-        alert("Permissões salvas com sucesso!");
+        showToast("Permissões salvas com sucesso!", "success");
         carregarDados();
       })
       .catch(err => {
         console.error("Erro ao salvar", err);
-        alert(err.response?.data || "Erro ao salvar permissões.");
+        showToast(err.response?.data || "Erro ao salvar permissões.", "error");
       });
   };
 
@@ -111,7 +113,7 @@ function ControleAcesso() {
       modulosIds: novosModulos
     })
     .then(res => {
-      alert("Usuário cadastrado com sucesso!");
+      showToast("Usuário cadastrado com sucesso!", "success");
       setModalNovoUsuario(false);
       carregarDados();
       selecionarUsuario(res.data);
@@ -125,22 +127,26 @@ function ControleAcesso() {
   // Função para excluir usuário
   const handleExcluirUsuario = (user, e) => {
     e.stopPropagation();
-    if (!window.confirm(`Tem certeza que deseja excluir o usuário "${user.login}"?`)) {
-      return;
-    }
-
-    api.delete(`/usuarios/${user.id}`)
-      .then(() => {
-        alert("Usuário excluído com sucesso!");
-        if (usuarioSelecionado?.id === user.id) {
-          setUsuarioSelecionado(null);
-        }
-        carregarDados();
-      })
-      .catch(err => {
-        console.error("Erro ao excluir usuário", err);
-        alert(err.response?.data || "Erro ao excluir usuário.");
-      });
+    showConfirm({
+      titulo: 'Excluir Usuário',
+      mensagem: `Tem certeza que deseja excluir o usuário "${user.login}"? Esta ação revogará todo o acesso deste usuário.`,
+      textoConfirmar: 'Excluir Usuário',
+      danger: true,
+      onConfirm: () => {
+        api.delete(`/usuarios/${user.id}`)
+          .then(() => {
+            showToast("Usuário excluído com sucesso!", "success");
+            if (usuarioSelecionado?.id === user.id) {
+              setUsuarioSelecionado(null);
+            }
+            carregarDados();
+          })
+          .catch(err => {
+            console.error("Erro ao excluir usuário", err);
+            showToast(err.response?.data || "Erro ao excluir usuário.", "error");
+          });
+      }
+    });
   };
 
   return (

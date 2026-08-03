@@ -4,10 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
 import ActionMenu from '../../components/ActionMenu/ActionMenu';
 import { FaCheckCircle } from 'react-icons/fa';
+import { useToast } from '../../context/ToastContext';
 import '../Secretaria/Secretaria.css';
 import './Gabinete.css';
 
 function Gabinete() {
+  const { showToast, showConfirm } = useToast();
   // ESTADO DA ABA ATIVA
   const [abaAtiva, setAbaAtiva] = useState('VISAO_AGUIA'); // 'VISAO_AGUIA', 'AGENDA_ACONSELHAMENTO', 'VISITACAO', 'DISCIPLINA'
 
@@ -124,11 +126,11 @@ function Gabinete() {
 
     api.post('/gabinete/compromissos', payload)
       .then(() => {
-        alert("Compromisso agendado na Agenda Pastoral!");
+        showToast("Compromisso pastoral agendado com sucesso!", "success");
         setModalCompromissoAberto(false);
         carregarDados();
       })
-      .catch(err => alert("Erro ao agendar compromisso."));
+      .catch(err => showToast("Erro ao agendar compromisso.", "error"));
   };
 
   // SALVAR ACONSELHAMENTO CONFIDENCIAL
@@ -148,11 +150,11 @@ function Gabinete() {
 
     api.post('/gabinete/aconselhamentos', payload)
       .then(() => {
-        alert("Ficha confidencial de aconselhamento salva com sucesso!");
+        showToast("Ficha confidencial de aconselhamento salva com sucesso!", "success");
         setModalAconselhamentoAberto(false);
         carregarDados();
       })
-      .catch(err => alert("Erro ao salvar aconselhamento."));
+      .catch(err => showToast("Erro ao salvar aconselhamento.", "error"));
   };
 
   // SALVAR GESTÃO DE DISCIPLINA / RESTAURAÇÃO
@@ -173,22 +175,31 @@ function Gabinete() {
 
     api.post('/gabinete/disciplinas', payload)
       .then(() => {
-        alert("Acompanhamento de disciplina/restauração registrado!");
+        showToast("Acompanhamento de disciplina/restauração registrado!", "success");
         setModalDisciplinaAberto(false);
         carregarDados();
       })
-      .catch(err => alert("Erro ao salvar disciplina."));
+      .catch(err => showToast("Erro ao salvar disciplina.", "error"));
   };
 
   const reintegrarMembro = (disciplina) => {
-    if (window.confirm(`Confirmar a reintegração espiritual do irmão(ã) "${disciplina.nomeMembro}" à comunhão da igreja?`)) {
-      api.put(`/gabinete/disciplinas/${disciplina.id}`, { ...disciplina, status: 'Reintegrado' })
-        .then(() => {
-          alert(`Membro "${disciplina.nomeMembro}" reintegrado à comunhão com sucesso! Glória a Deus!`);
-          carregarDados();
-        })
-        .catch(err => console.error("Erro ao reintegrar", err));
-    }
+    showConfirm({
+      titulo: 'Reintegrar à Comunhão',
+      mensagem: `Confirmar a reintegração espiritual do irmão(ã) "${disciplina.nomeMembro}" à comunhão da igreja?`,
+      textoConfirmar: 'Reintegrar Membro',
+      danger: false,
+      onConfirm: () => {
+        api.put(`/gabinete/disciplinas/${disciplina.id}`, { ...disciplina, status: 'Reintegrado' })
+          .then(() => {
+            showToast(`Membro "${disciplina.nomeMembro}" reintegrado à comunhão com sucesso! Glória a Deus!`, "success");
+            carregarDados();
+          })
+          .catch(err => {
+            console.error("Erro ao reintegrar", err);
+            showToast("Erro ao reintegrar membro.", "error");
+          });
+      }
+    });
   };
 
   // SALVAR PEDIDO DE VISITA
@@ -196,11 +207,11 @@ function Gabinete() {
     e.preventDefault();
     api.post('/gabinete/visitas', formVisita)
       .then(() => {
-        alert("Pedido de visita registrado e encaminhado na fila!");
+        showToast("Pedido de visita registrado e encaminhado na fila!", "success");
         setModalVisitaAberto(false);
         carregarDados();
       })
-      .catch(err => alert("Erro ao cadastrar visita."));
+      .catch(err => showToast("Erro ao cadastrar visita.", "error"));
   };
 
   const concluirVisitaComRelatorio = (e) => {
@@ -216,11 +227,11 @@ function Gabinete() {
 
     api.put(`/gabinete/visitas/${itemSelecionado.id}`, payload)
       .then(() => {
-        alert("Relatório de visita cadastrado com sucesso!");
+        showToast("Relatório de visita cadastrado com sucesso!", "success");
         setModalRelatorioVisitaAberto(false);
         carregarDados();
       })
-      .catch(err => alert("Erro ao salvar relatório de visita."));
+      .catch(err => showToast("Erro ao salvar relatório de visita.", "error"));
   };
 
   const formatarData = (dataStr) => {

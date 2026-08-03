@@ -4,10 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
 import ActionMenu from '../../components/ActionMenu/ActionMenu';
 import { FaUserFriends, FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { useToast } from '../../context/ToastContext';
 import '../Secretaria/Secretaria.css';
 import './Cultos.css';
 
 function Cultos() {
+  const { showToast, showConfirm } = useToast();
   const dataHoje = new Date();
 
   // ESTADOS DE DADOS
@@ -168,31 +170,40 @@ function Cultos() {
     if (formCulto.id) {
       api.put(`/cultos/${formCulto.id}`, formCulto)
         .then(() => {
-          alert("Culto atualizado com sucesso!");
+          showToast("Culto atualizado com sucesso!", "success");
           setModalCultoAberto(false);
           carregarDados();
         })
-        .catch(err => alert("Erro ao atualizar culto."));
+        .catch(err => showToast("Erro ao atualizar culto.", "error"));
     } else {
       api.post('/cultos', formCulto)
         .then(() => {
-          alert("Culto agendado com sucesso!");
+          showToast("Culto agendado com sucesso!", "success");
           setModalCultoAberto(false);
           carregarDados();
         })
-        .catch(err => alert("Erro ao agendar culto."));
+        .catch(err => showToast("Erro ao agendar culto.", "error"));
     }
   };
 
   const deletarCulto = (id) => {
-    if (window.confirm("Deseja realmente excluir este culto?")) {
-      api.delete(`/cultos/${id}`)
-        .then(() => {
-          alert("Culto excluído com sucesso!");
-          carregarDados();
-        })
-        .catch(err => console.error("Erro ao excluir culto", err));
-    }
+    showConfirm({
+      titulo: 'Excluir Culto',
+      mensagem: 'Deseja realmente excluir este culto? Esta ação não poderá ser desfeita.',
+      textoConfirmar: 'Excluir Culto',
+      danger: true,
+      onConfirm: () => {
+        api.delete(`/cultos/${id}`)
+          .then(() => {
+            showToast("Culto excluído com sucesso!", "success");
+            carregarDados();
+          })
+          .catch(err => {
+            console.error("Erro ao excluir culto", err);
+            showToast("Erro ao excluir culto.", "error");
+          });
+      }
+    });
   };
 
   // ESCALAR MEMBRO COM PREVENÇÃO DE CONFLITOS SÊNIOR
@@ -216,7 +227,7 @@ function Cultos() {
     }
 
     if (!nomeEscalado) {
-      alert("Por favor, selecione um membro da igreja ou informe o nome.");
+      showToast("Por favor, selecione um membro da igreja ou informe o nome.", "warning");
       return;
     }
 
@@ -249,11 +260,11 @@ function Cultos() {
         setMensagemConflito('');
         setCultoSelecionado(res.data);
         carregarDados();
-        alert(`"${nomeEscalado}" escalado(a) com sucesso no departamento ${formEscala.departamento}!`);
+        showToast(`"${nomeEscalado}" escalado(a) com sucesso no departamento ${formEscala.departamento}!`, "success");
       })
       .catch(err => {
         console.error("Erro ao escalar", err);
-        alert(err.response?.data || "Erro ao escalar membro.");
+        showToast(err.response?.data || "Erro ao escalar membro.", "error");
       });
   };
 
@@ -297,11 +308,11 @@ function Cultos() {
 
     api.put(`/cultos/${cultoSelecionado.id}`, cultoAtualizado)
       .then(() => {
-        alert("Métricas do culto registradas com sucesso!");
+        showToast("Métricas do culto registradas com sucesso!", "success");
         setModalMetricasAberto(false);
         carregarDados();
       })
-      .catch(err => alert("Erro ao salvar métricas."));
+      .catch(err => showToast("Erro ao salvar métricas.", "error"));
   };
 
   const formatarData = (dataStr) => {

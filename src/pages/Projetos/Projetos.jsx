@@ -4,10 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
 import ActionMenu from '../../components/ActionMenu/ActionMenu';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { useToast } from '../../context/ToastContext';
 import '../Secretaria/Secretaria.css';
 import './Projetos.css';
 
 function Projetos() {
+  const { showToast, showConfirm } = useToast();
   // ESTADOS DE DADOS
   const [projetos, setProjetos] = useState([]);
   const [congregacoes, setCongregacoes] = useState([]);
@@ -143,31 +145,40 @@ function Projetos() {
     if (formProjeto.id) {
       api.put(`/projetos/${formProjeto.id}`, payload)
         .then(() => {
-          alert("Projeto / Campanha atualizado com sucesso!");
+          showToast("Projeto / Campanha atualizado com sucesso!", "success");
           setModalProjetoAberto(false);
           carregarDados();
         })
-        .catch(err => alert("Erro ao atualizar projeto."));
+        .catch(err => showToast("Erro ao atualizar projeto.", "error"));
     } else {
       api.post('/projetos', payload)
         .then(() => {
-          alert("Projeto / Campanha cadastrado com sucesso!");
+          showToast("Projeto / Campanha cadastrado com sucesso!", "success");
           setModalProjetoAberto(false);
           carregarDados();
         })
-        .catch(err => alert("Erro ao cadastrar projeto."));
+        .catch(err => showToast("Erro ao cadastrar projeto.", "error"));
     }
   };
 
   const deletarProjeto = (id) => {
-    if (window.confirm("Deseja realmente excluir esta campanha?")) {
-      api.delete(`/projetos/${id}`)
-        .then(() => {
-          alert("Projeto excluído com sucesso!");
-          carregarDados();
-        })
-        .catch(err => console.error("Erro ao excluir projeto", err));
-    }
+    showConfirm({
+      titulo: 'Excluir Projeto Social',
+      mensagem: 'Deseja realmente excluir esta campanha? Esta ação não poderá ser desfeita.',
+      textoConfirmar: 'Excluir Projeto',
+      danger: true,
+      onConfirm: () => {
+        api.delete(`/projetos/${id}`)
+          .then(() => {
+            showToast("Projeto excluído com sucesso!", "success");
+            carregarDados();
+          })
+          .catch(err => {
+            console.error("Erro ao excluir projeto", err);
+            showToast("Erro ao excluir projeto.", "error");
+          });
+      }
+    });
   };
 
   // REGISTRAR DOAÇÃO (FÍSICA OU RECURSO FINANCEIRO)
@@ -191,7 +202,7 @@ function Projetos() {
     if (formDoacao.tipoDoacao === 'FINANCEIRO') {
       const val = parseFloat(formDoacao.valorFinanceiro);
       if (!val || val <= 0) {
-        alert("Informe um valor financeiro válido.");
+        showToast("Informe um valor financeiro válido.", "warning");
         return;
       }
 
@@ -202,15 +213,15 @@ function Projetos() {
 
       api.put(`/projetos/${projetoSelecionado.id}`, projetoAtualizado)
         .then(() => {
-          alert(`Doação financeira de ${formatarMoeda(val)} registrada com sucesso!`);
+          showToast(`Doação financeira de ${formatarMoeda(val)} registrada com sucesso!`, "success");
           setModalDoacaoAberto(false);
           carregarDados();
         })
-        .catch(err => alert("Erro ao registrar doação financeira."));
+        .catch(err => showToast("Erro ao registrar doação financeira.", "error"));
     } else {
       const qtd = parseFloat(formDoacao.quantidade);
       if (!qtd || qtd <= 0) {
-        alert("Informe uma quantidade válida do item.");
+        showToast("Informe uma quantidade válida do item.", "warning");
         return;
       }
 
@@ -224,11 +235,11 @@ function Projetos() {
 
       api.post(`/projetos/${projetoSelecionado.id}/doacao`, doacaoItemPayload)
         .then(() => {
-          alert(`Doação de ${qtd} ${formDoacao.unidadeMedida} de "${formDoacao.item}" registrada com sucesso!`);
+          showToast(`Doação de ${qtd} ${formDoacao.unidadeMedida} de "${formDoacao.item}" registrada com sucesso!`, "success");
           setModalDoacaoAberto(false);
           carregarDados();
         })
-        .catch(err => alert("Erro ao registrar doação de item."));
+        .catch(err => showToast("Erro ao registrar doação de item.", "error"));
     }
   };
 
@@ -250,7 +261,7 @@ function Projetos() {
     if (!projetoSelecionado) return;
 
     if (!formAtendimento.nomeResponsavel) {
-      alert("Informe o nome do responsável da família atendida.");
+      showToast("Informe o nome do responsável da família atendida.", "warning");
       return;
     }
 
@@ -261,11 +272,11 @@ function Projetos() {
 
     api.post(`/projetos/${projetoSelecionado.id}/atendimento`, payload)
       .then(() => {
-        alert("Atendimento de assistência social registrado com sucesso!");
+        showToast("Atendimento de assistência social registrado com sucesso!", "success");
         setModalAtendimentoAberto(false);
         carregarDados();
       })
-      .catch(err => alert("Erro ao registrar atendimento."));
+      .catch(err => showToast("Erro ao registrar atendimento.", "error"));
   };
 
   const formatarMoeda = (val) => (val || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });

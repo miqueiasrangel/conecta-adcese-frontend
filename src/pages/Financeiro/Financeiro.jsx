@@ -7,8 +7,10 @@ import './Financeiro.css';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
 import ActionMenu from '../../components/ActionMenu/ActionMenu';
 import { FaTrashAlt } from 'react-icons/fa';
+import { useToast } from '../../context/ToastContext';
 
 function Financeiro() {
+  const { showToast, showConfirm } = useToast();
   const dataAtual = new Date();
 
   // HOOKS DE ESTADO (DECLARADOS NO INÍCIO)
@@ -130,7 +132,7 @@ function Financeiro() {
     e.preventDefault();
 
     if (!congregacaoIdForm) {
-      alert("Por favor, selecione a congregação.");
+      showToast("Por favor, selecione a congregação.", "warning");
       return;
     }
 
@@ -139,7 +141,7 @@ function Financeiro() {
     if (tipoForm === 'ENTRADA') {
       for (let item of itensEntrada) {
         if (!item.valor || parseFloat(item.valor) <= 0) {
-          alert("Informe um valor válido maior que zero para todos os itens da entrada.");
+          showToast("Informe um valor válido maior que zero para todos os itens da entrada.", "warning");
           return;
         }
       }
@@ -157,21 +159,21 @@ function Financeiro() {
 
       api.post('/lancamentos/lote', lote)
         .then(() => {
-          alert(`${lote.length} lançamento(s) de entrada registrado(s) com sucesso!`);
+          showToast(`${lote.length} lançamento(s) de entrada registrado(s) com sucesso!`, "success");
           fecharEAtualizarModal();
         })
         .catch(err => {
           console.error("Erro ao cadastrar lote", err);
-          alert("Erro ao cadastrar entradas.");
+          showToast("Erro ao cadastrar entradas.", "error");
         });
 
     } else {
       if (!formSaida.valor || parseFloat(formSaida.valor) <= 0) {
-        alert("Informe um valor válido para a saída.");
+        showToast("Informe um valor válido para a saída.", "warning");
         return;
       }
       if (!formSaida.descricao) {
-        alert("Informe o motivo/descrição da saída.");
+        showToast("Informe o motivo/descrição da saída.", "warning");
         return;
       }
 
@@ -188,12 +190,12 @@ function Financeiro() {
 
       api.post('/lancamentos', payload)
         .then(() => {
-          alert("Lançamento de saída (retirada) registrado com sucesso!");
+          showToast("Lançamento de saída (retirada) registrado com sucesso!", "success");
           fecharEAtualizarModal();
         })
         .catch(err => {
           console.error("Erro ao registrar saída", err);
-          alert("Erro ao registrar saída.");
+          showToast("Erro ao registrar saída.", "error");
         });
     }
   };
@@ -211,23 +213,30 @@ function Financeiro() {
 
   const deletarLancamento = (id) => {
     if (!isAdmin) {
-      alert("Acesso negado. Apenas o usuário ADMINISTRADOR pode excluir lançamentos financeiros.");
+      showToast("Acesso negado. Apenas o usuário ADMINISTRADOR pode excluir lançamentos financeiros.", "error");
       return;
     }
-    if (window.confirm("Deseja realmente excluir este lançamento financeiro?")) {
-      api.delete(`/lancamentos/${id}`)
-        .then(() => {
-          alert("Lançamento excluído com sucesso!");
-          carregarDados();
-        })
-        .catch(err => {
-          if (err.response && err.response.status === 403) {
-            alert("Acesso negado. Apenas o administrador tem permissão para excluir lançamentos financeiros.");
-          } else {
-            alert("Erro ao excluir lançamento. Tente novamente.");
-          }
-        });
-    }
+
+    showConfirm({
+      titulo: 'Excluir Lançamento Financeiro',
+      mensagem: 'Deseja realmente excluir este lançamento financeiro? Esta ação não poderá ser desfeita.',
+      textoConfirmar: 'Excluir Lançamento',
+      danger: true,
+      onConfirm: () => {
+        api.delete(`/lancamentos/${id}`)
+          .then(() => {
+            showToast("Lançamento excluído com sucesso!", "success");
+            carregarDados();
+          })
+          .catch(err => {
+            if (err.response && err.response.status === 403) {
+              showToast("Acesso negado. Apenas o administrador tem permissão para excluir lançamentos financeiros.", "error");
+            } else {
+              showToast("Erro ao excluir lançamento. Tente novamente.", "error");
+            }
+          });
+      }
+    });
   };
 
   const listaSeguraLancamentos = Array.isArray(lancamentos) ? lancamentos : [];

@@ -4,10 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
 import ActionMenu from '../../components/ActionMenu/ActionMenu';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { useToast } from '../../context/ToastContext';
 import '../Secretaria/Secretaria.css'; 
 
-
 function Congregacoes() {
+  const { showToast, showConfirm } = useToast();
   const [congregacoes, setCongregacoes] = useState([]);
   const [obreiros, setObreiros] = useState([]);
   const [modalAberto, setModalAberto] = useState(false);
@@ -72,43 +73,47 @@ function Congregacoes() {
       // Edição (PUT)
       api.put(`/congregacoes/${congregacaoEdicaoId}`, payload)
         .then(() => {
-          alert("Congregação atualizada com sucesso!");
+          showToast("Congregação atualizada com sucesso!", "success");
           setModalAberto(false);
           carregarCongregacoes();
         })
         .catch(err => {
           console.error("Erro ao atualizar congregação:", err);
-          alert("Erro ao atualizar congregação.");
+          showToast("Erro ao atualizar congregação.", "error");
         });
     } else {
       // Cadastro (POST)
       api.post('/congregacoes', payload)
         .then(() => {
-          alert("Congregação cadastrada com sucesso!");
+          showToast("Congregação cadastrada com sucesso!", "success");
           setModalAberto(false);
           carregarCongregacoes();
         })
         .catch(err => {
           console.error("Erro ao cadastrar congregação:", err);
-          alert("Erro ao cadastrar congregação.");
+          showToast("Erro ao cadastrar congregação.", "error");
         });
     }
   };
 
   const handleExcluir = (cong) => {
-    if (!window.confirm(`Tem certeza que deseja excluir a congregação "${cong.nome}"?`)) {
-      return;
-    }
-
-    api.delete(`/congregacoes/${cong.id}`)
-      .then(() => {
-        alert("Congregação excluída com sucesso!");
-        carregarCongregacoes();
-      })
-      .catch(err => {
-        console.error("Erro ao excluir congregação:", err);
-        alert("Erro ao excluir congregação.");
-      });
+    showConfirm({
+      titulo: 'Excluir Congregação',
+      mensagem: `Tem certeza que deseja excluir a congregação "${cong.nome}"? Esta ação não poderá ser desfeita.`,
+      textoConfirmar: 'Excluir Congregação',
+      danger: true,
+      onConfirm: () => {
+        api.delete(`/congregacoes/${cong.id}`)
+          .then(() => {
+            showToast("Congregação excluída com sucesso!", "success");
+            carregarCongregacoes();
+          })
+          .catch(err => {
+            console.error("Erro ao excluir congregação:", err);
+            showToast("Erro ao excluir congregação.", "error");
+          });
+      }
+    });
   };
 
   return (
