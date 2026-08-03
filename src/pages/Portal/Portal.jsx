@@ -3,6 +3,7 @@ import api from '../../services/api';
 import * as FaIcons from 'react-icons/fa';
 import { FaUserCog, FaKey, FaSignOutAlt, FaSearch, FaChurch, FaArrowRight, FaUsers, FaBuilding, FaCalendarAlt, FaHandHoldingHeart, FaUserCircle } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import ThemeToggle from '../../components/ThemeToggle/ThemeToggle';
 import './Portal.css'; 
 
 function Portal() {
@@ -149,6 +150,7 @@ function Portal() {
               <FaUserCircle className="user-avatar-icon" />
               <span>Olá, <strong>{usuarioLogado}</strong></span>
             </div>
+            <ThemeToggle />
             <button onClick={() => navigate('/alterar-senha')} className="nav-btn">
               <FaKey /> Alterar Senha
             </button>

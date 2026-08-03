@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import api from '../../services/api';
 import { FaUser, FaLock, FaSignInAlt } from 'react-icons/fa';
+import ThemeToggle from '../../components/ThemeToggle/ThemeToggle';
 import './Login.css';
 
 function Login() {
@@ -32,6 +33,10 @@ function Login() {
     <div className="login-container">
       <div className="login-overlay-glow"></div>
       
+      <div style={{ position: 'absolute', top: '20px', right: '25px', zIndex: 10 }}>
+        <ThemeToggle />
+      </div>
+
       <div className="login-card">
         <div className="login-header">
           <div className="login-logo-wrapper">
