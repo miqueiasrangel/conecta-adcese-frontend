@@ -45,10 +45,28 @@
   white-space: nowrap;
 }
 
+/* SMART POSITIONING FOR BOTTOM ROWS */
+.action-menu-dropdown.open-up {
+  top: auto;
+  bottom: calc(100% + 4px);
+  animation: actionMenuFadeInUp 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 @keyframes actionMenuFadeIn {
   from {
     opacity: 0;
     transform: translateY(-6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes actionMenuFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
   }
   to {
     opacity: 1;
