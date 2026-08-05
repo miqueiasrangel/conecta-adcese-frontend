@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { FaUserCircle, FaArrowLeft } from 'react-icons/fa';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
+import PwaInstallButton from '../PwaInstallButton/PwaInstallButton';
 import './NavbarHeader.css';
 
 function NavbarHeader({ tituloModulo, descricaoModulo, botoesAcao }) {
@@ -20,6 +21,7 @@ function NavbarHeader({ tituloModulo, descricaoModulo, botoesAcao }) {
             <FaUserCircle className="user-avatar-icon" />
             <span>Olá, <strong>{usuarioLogado}</strong></span>
           </div>
+          <PwaInstallButton />
           <ThemeToggle />
           <button onClick={() => navigate('/painel')} className="btn-voltar-portal-nav">
             <FaArrowLeft /> Voltar ao Portal
