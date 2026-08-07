@@ -281,9 +281,19 @@ input, select, textarea {
   --shadow-xl: 0 24px 48px -12px rgba(0, 0, 0, 0.8);
 }
 
-[data-theme="dark"] body {
-  background-color: #070a12;
-  color: #f8fafc;
+[data-theme="dark"] body,
+[data-theme="dark"] .admin-wrapper,
+[data-theme="dark"] .cultos-wrapper,
+[data-theme="dark"] .financeiro-wrapper,
+[data-theme="dark"] .gabinete-wrapper,
+[data-theme="dark"] .logs-wrapper,
+[data-theme="dark"] .portal-wrapper,
+[data-theme="dark"] .projetos-wrapper,
+[data-theme="dark"] .secretaria-wrapper,
+[data-theme="dark"] .alterar-senha-wrapper,
+[data-theme="dark"] .login-wrapper {
+  background-color: #070a12 !important;
+  color: #f8fafc !important;
 }
 
 [data-theme="dark"] .stat-card,
@@ -298,7 +308,20 @@ input, select, textarea {
 [data-theme="dark"] .projeto-card,
 [data-theme="dark"] .gabinete-tabs,
 [data-theme="dark"] .usuarios-lista,
-[data-theme="dark"] .permissoes-painel {
+[data-theme="dark"] .permissoes-painel,
+[data-theme="dark"] .tabela-container,
+[data-theme="dark"] .filtro-bar,
+[data-theme="dark"] .filtros-container,
+[data-theme="dark"] .fin-card,
+[data-theme="dark"] .impacto-card,
+[data-theme="dark"] .fin-resumo-card,
+[data-theme="dark"] .resumo-card,
+[data-theme="dark"] .aguia-card,
+[data-theme="dark"] .metricas-card-culto,
+[data-theme="dark"] .item-lote-linha,
+[data-theme="dark"] .carteirinha-qr,
+[data-theme="dark"] [style*="background: white"],
+[data-theme="dark"] [style*="background-color: white"] {
   background-color: #0f172a !important;
   border-color: #334155 !important;
   color: #f8fafc !important;
