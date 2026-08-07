@@ -181,7 +181,7 @@ function Secretaria() {
       api.put(`/membros/${dadosFormulario.id}`, dadosFormulario)
         .then(() => {
           showToast("Membro atualizado com sucesso!", "success");
-          registrarLog('Secretaria', 'EDITAR_MEMBRO', `Cadastro do membro ${dadosFormulario.nome} atualizado.`);
+          registrarLog('Secretaria', 'EDITAR_MEMBRO', `Atualizados dados do membro "${dadosFormulario.nome}" (Chapa: ${dadosFormulario.chapa || '-'}, Cargo: ${dadosFormulario.cargo || 'Membro'}, Congregação: ${dadosFormulario.congregacao || '-'}, Status: ${dadosFormulario.status || 'Ativo'})`);
           setModalAberto(false);
           carregarMembros();
         })
@@ -190,7 +190,7 @@ function Secretaria() {
       api.post('/membros', dadosFormulario)
         .then(() => {
           showToast("Membro cadastrado com sucesso!", "success");
-          registrarLog('Secretaria', 'NOVO_MEMBRO', `Novo membro cadastrado: ${dadosFormulario.nome}.`);
+          registrarLog('Secretaria', 'NOVO_MEMBRO', `Cadastrado novo membro "${dadosFormulario.nome}" (Cargo: ${dadosFormulario.cargo || 'Membro'}, Congregação: ${dadosFormulario.congregacao || '-'}, Chapa: ${dadosFormulario.chapa || '-'}, Status: ${dadosFormulario.status || 'Ativo'})`);
           setModalAberto(false);
           carregarMembros(0);
         })
@@ -208,7 +208,7 @@ function Secretaria() {
         api.delete(`/membros/${membro.id}`)
           .then(() => {
             showToast("Membro excluído do rol com sucesso!", "success");
-            registrarLog('Secretaria', 'EXCLUIR_MEMBRO', `O membro ${membro.nome} foi excluído do rol.`);
+            registrarLog('Secretaria', 'EXCLUIR_MEMBRO', `Excluído membro "${membro.nome}" (Chapa: ${membro.chapa || '-'}, Cargo: ${membro.cargo || 'Membro'}, Congregação: ${membro.congregacao || '-'}, Status: ${membro.status || 'Ativo'})`);
             carregarMembros(pagina);
           })
           .catch(err => {

@@ -80,7 +80,9 @@ function ControleAcesso() {
     ])
       .then(() => {
         showToast("Configurações salvas com sucesso!", "success");
-        registrarLog('Controle de Acesso', 'ALTERAR_PERMISSOES', `As permissões do usuário ${usuarioSelecionado.login} foram atualizadas.`);
+        const modulosLiberados = modulosTotais.filter(m => modulosMarcados.includes(m.id)).map(m => m.titulo).join(', ');
+        const detalhe = `Atualizadas permissões de ${usuarioSelecionado.login}: perfil ${usuarioSelecionado.admin ? 'ADMINISTRADOR (Acesso Total)' : 'Comum'}. Módulos liberados: [${modulosLiberados || 'Nenhum'}]`;
+        registrarLog('Controle de Acesso', 'ALTERAR_PERMISSOES', detalhe);
         carregarDados();
       })
       .catch(err => {
@@ -125,7 +127,9 @@ function ControleAcesso() {
     })
     .then(res => {
       showToast("Usuário cadastrado com sucesso!", "success");
-      registrarLog('Controle de Acesso', 'NOVO_USUARIO', `O usuário ${novoLogin.trim()} foi criado.`);
+      const modulosIniciais = modulosTotais.filter(m => novosModulos.includes(m.id)).map(m => m.titulo).join(', ');
+      const detalhe = `Criado novo usuário "${novoLogin.trim()}" (Perfil: ${novoAdmin ? 'ADMINISTRADOR' : 'Comum'}). Módulos liberados: [${modulosIniciais || 'Nenhum'}]`;
+      registrarLog('Controle de Acesso', 'NOVO_USUARIO', detalhe);
       setModalNovoUsuario(false);
       carregarDados();
       selecionarUsuario(res.data);
@@ -151,7 +155,8 @@ function ControleAcesso() {
         api.delete(`/usuarios/${user.id}`)
           .then(() => {
             showToast("Usuário excluído com sucesso!", "success");
-            registrarLog('Controle de Acesso', 'EXCLUIR_USUARIO', `O usuário ${user.login} foi excluído do sistema.`);
+            const detalhe = `Excluído usuário "${user.login}" (ID #${user.id}, Perfil: ${user.admin ? 'ADMINISTRADOR' : 'Comum'})`;
+            registrarLog('Controle de Acesso', 'EXCLUIR_USUARIO', detalhe);
             if (usuarioSelecionado?.id === user.id) {
               setUsuarioSelecionado(null);
             }

@@ -160,7 +160,8 @@ function Financeiro() {
       api.post('/lancamentos/lote', lote)
         .then(() => {
           showToast(`Lote com ${itensEntrada.length} entrada(s) registrado com sucesso!`, "success");
-          registrarLog('Financeiro', 'NOVO_LANCAMENTO', `Registrado lote com ${itensEntrada.length} entrada(s) totalizando R$ ${totalLote.toFixed(2)}`);
+          const resumoItens = itensEntrada.map(i => `${i.categoria || 'Entrada'}: R$ ${Number(i.valor || 0).toFixed(2)} (${i.formaPagamento})`).join('; ');
+          registrarLog('Financeiro', 'NOVO_LANCAMENTO', `Registrada entrada em lote (${itensEntrada.length} item/itens) totalizando R$ ${totalLote.toFixed(2)}: [${resumoItens}]`);
           fecharEAtualizarModal();
         })
         .catch(err => {
@@ -192,7 +193,7 @@ function Financeiro() {
       api.post('/lancamentos', payload)
         .then(() => {
           showToast("Saída/Despesa registrada com sucesso!", "success");
-          registrarLog('Financeiro', 'NOVA_SAIDA', `Registrada saída no valor de R$ ${formatarMoeda(parseFloat(formSaida.valor))} para ${formSaida.destinatario}`);
+          registrarLog('Financeiro', 'NOVA_SAIDA', `Registrada saída no valor de R$ ${Number(formSaida.valor).toFixed(2)} para "${formSaida.destinatario || 'Geral'}" - Motivo: "${formSaida.descricao}" (${formSaida.categoria})`);
           fecharEAtualizarModal();
         })
         .catch(err => {
@@ -218,6 +219,11 @@ function Financeiro() {
       return;
     }
 
+    const itemEncontrado = (lancamentos || []).find(l => l.id === id);
+    const descItem = itemEncontrado 
+      ? `Lançamento ID #${id} (${itemEncontrado.tipo === 'ENTRADA' ? 'Entrada' : 'Saída'}) de R$ ${Number(itemEncontrado.valor || 0).toFixed(2)} - Descrição: "${itemEncontrado.descricao || itemEncontrado.categoria || 'Sem descrição'}"`
+      : `Lançamento ID #${id}`;
+
     showConfirm({
       titulo: 'Excluir Lançamento Financeiro',
       mensagem: 'Deseja realmente excluir este lançamento financeiro? Esta ação não poderá ser desfeita.',
@@ -227,7 +233,7 @@ function Financeiro() {
         api.delete(`/lancamentos/${id}`)
           .then(() => {
             showToast("Lançamento excluído com sucesso!", "success");
-            registrarLog('Financeiro', 'EXCLUIR_LANCAMENTO', `Lançamento ID ${id} foi excluído.`);
+            registrarLog('Financeiro', 'EXCLUIR_LANCAMENTO', `Excluído ${descItem}`);
             carregarDados();
           })
           .catch(err => {
@@ -880,7 +886,7 @@ function Financeiro() {
                   </div>
                 </div>
               ) : (
-                <div className="itens-lote-box" style={{ background: '#fff5f5', borderColor: '#feb2b2' }}>
+                <div className="itens-lote-box saida-box">
                   <h4 style={{ color: '#c53030', marginBottom: '15px' }}>
                     Dados da Saída / Retirada
                   </h4>
