@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import api from '../../services/api';
+import api, { registrarLog } from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 import '../Secretaria/Secretaria.css';
 import './Financeiro.css';
@@ -159,7 +159,8 @@ function Financeiro() {
 
       api.post('/lancamentos/lote', lote)
         .then(() => {
-          showToast(`${lote.length} lançamento(s) de entrada registrado(s) com sucesso!`, "success");
+          showToast(`Lote com ${itensEntrada.length} entrada(s) registrado com sucesso!`, "success");
+          registrarLog('Financeiro', 'NOVO_LANCAMENTO', `Registrado lote com ${itensEntrada.length} entrada(s) totalizando R$ ${totalLote.toFixed(2)}`);
           fecharEAtualizarModal();
         })
         .catch(err => {
@@ -190,7 +191,8 @@ function Financeiro() {
 
       api.post('/lancamentos', payload)
         .then(() => {
-          showToast("Lançamento de saída (retirada) registrado com sucesso!", "success");
+          showToast("Saída/Despesa registrada com sucesso!", "success");
+          registrarLog('Financeiro', 'NOVA_SAIDA', `Registrada saída no valor de R$ ${formatarMoeda(parseFloat(formSaida.valor))} para ${formSaida.destinatario}`);
           fecharEAtualizarModal();
         })
         .catch(err => {
@@ -225,6 +227,7 @@ function Financeiro() {
         api.delete(`/lancamentos/${id}`)
           .then(() => {
             showToast("Lançamento excluído com sucesso!", "success");
+            registrarLog('Financeiro', 'EXCLUIR_LANCAMENTO', `Lançamento ID ${id} foi excluído.`);
             carregarDados();
           })
           .catch(err => {

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import api from '../../services/api';
+import api, { registrarLog } from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 import { FaKey, FaLock, FaCheckCircle, FaArrowLeft, FaShieldAlt } from 'react-icons/fa';
 import './AlterarSenha.css';
@@ -34,6 +34,8 @@ function AlterarSenha() {
         setCarregando(false);
         setMensagem({ texto: 'Senha alterada com sucesso! Você será redirecionado para efetuar login.', tipo: 'sucesso' });
         
+        registrarLog('Acesso e Segurança', 'ALTERAR_SENHA', 'Usuário alterou sua própria senha com sucesso.');
+
         setTimeout(() => {
           localStorage.removeItem('token');
           localStorage.removeItem('usuarioLogado');

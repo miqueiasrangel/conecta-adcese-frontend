@@ -34,4 +34,9 @@ api.interceptors.response.use(
   }
 );
 
+export const registrarLog = (modulo, acao, descricao) => {
+  return api.post('/logs', { modulo, acao, descricao })
+    .catch(err => console.error('Falha silenciosa ao registrar log de auditoria', err));
+};
+
 export default api;

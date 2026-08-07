@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import api from '../../services/api';
+import api, { registrarLog } from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
 import ActionMenu from '../../components/ActionMenu/ActionMenu';
@@ -181,6 +181,7 @@ function Secretaria() {
       api.put(`/membros/${dadosFormulario.id}`, dadosFormulario)
         .then(() => {
           showToast("Membro atualizado com sucesso!", "success");
+          registrarLog('Secretaria', 'EDITAR_MEMBRO', `Cadastro do membro ${dadosFormulario.nome} atualizado.`);
           setModalAberto(false);
           carregarMembros();
         })
@@ -189,8 +190,9 @@ function Secretaria() {
       api.post('/membros', dadosFormulario)
         .then(() => {
           showToast("Membro cadastrado com sucesso!", "success");
+          registrarLog('Secretaria', 'NOVO_MEMBRO', `Novo membro cadastrado: ${dadosFormulario.nome}.`);
           setModalAberto(false);
-          carregarMembros();
+          carregarMembros(0);
         })
         .catch(err => showToast("Erro ao cadastrar membro.", "error"));
     }
@@ -205,8 +207,9 @@ function Secretaria() {
       onConfirm: () => {
         api.delete(`/membros/${membro.id}`)
           .then(() => {
-            showToast("Membro excluído com sucesso!", "success");
-            carregarMembros();
+            showToast("Membro excluído do rol com sucesso!", "success");
+            registrarLog('Secretaria', 'EXCLUIR_MEMBRO', `O membro ${membro.nome} foi excluído do rol.`);
+            carregarMembros(pagina);
           })
           .catch(err => {
             console.error("Erro ao excluir membro:", err);

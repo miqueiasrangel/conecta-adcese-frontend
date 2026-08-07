@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import api from '../../services/api';
+import api, { registrarLog } from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 import NavbarHeader from '../../components/NavbarHeader/NavbarHeader';
 import ActionMenu from '../../components/ActionMenu/ActionMenu';
@@ -77,6 +77,7 @@ function ControleAcesso() {
     ])
       .then(() => {
         showToast("Configurações salvas com sucesso!", "success");
+        registrarLog('Controle de Acesso', 'ALTERAR_PERMISSOES', `As permissões do usuário ${usuarioSelecionado.login} foram atualizadas.`);
         carregarDados();
       })
       .catch(err => {
@@ -121,6 +122,7 @@ function ControleAcesso() {
     })
     .then(res => {
       showToast("Usuário cadastrado com sucesso!", "success");
+      registrarLog('Controle de Acesso', 'NOVO_USUARIO', `O usuário ${novoLogin.trim()} foi criado.`);
       setModalNovoUsuario(false);
       carregarDados();
       selecionarUsuario(res.data);
@@ -146,6 +148,7 @@ function ControleAcesso() {
         api.delete(`/usuarios/${user.id}`)
           .then(() => {
             showToast("Usuário excluído com sucesso!", "success");
+            registrarLog('Controle de Acesso', 'EXCLUIR_USUARIO', `O usuário ${user.login} foi excluído do sistema.`);
             if (usuarioSelecionado?.id === user.id) {
               setUsuarioSelecionado(null);
             }

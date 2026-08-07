@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import api from '../../services/api';
+import api, { registrarLog } from '../../services/api';
 import { FaUser, FaLock, FaSignInAlt } from 'react-icons/fa';
 import ThemeToggle from '../../components/ThemeToggle/ThemeToggle';
 import './Login.css';
@@ -24,7 +24,9 @@ function Login() {
         localStorage.setItem('usuarioLogado', usuario);
         localStorage.setItem('loginUsuario', login);
         localStorage.setItem('isAdmin', isAdmin ? 'true' : 'false');
-        window.location.href = '/painel';
+        
+        registrarLog('Acesso e Segurança', 'LOGIN', `O usuário ${usuario} entrou no sistema.`)
+          .finally(() => window.location.href = '/painel');
       })
       .catch(() => {
         setCarregando(false);
