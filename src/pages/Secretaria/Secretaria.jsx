@@ -443,16 +443,16 @@ function Secretaria() {
             <form onSubmit={salvarMembro} className="form-membro">
               
               {/* UPLOAD DA FOTO DO MEMBRO */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '20px', background: '#f8fafc', padding: '15px', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
+              <div className="foto-upload-box">
                 {dadosFormulario.fotoUrl ? (
-                  <img src={dadosFormulario.fotoUrl} alt="Foto do Membro" style={{ width: '70px', height: '70px', borderRadius: '50%', objectFit: 'cover', border: '3px solid #003366' }} />
+                  <img src={dadosFormulario.fotoUrl} alt="Foto do Membro" className="foto-upload-img" />
                 ) : (
-                  <div style={{ width: '70px', height: '70px', borderRadius: '50%', background: '#003366', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '1.4rem' }}>
+                  <div className="foto-upload-avatar-placeholder">
                     📷
                   </div>
                 )}
                 <div>
-                  <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px', color: '#003366' }}>Foto do Membro (Upload):</label>
+                  <label className="foto-upload-label">Foto do Membro (Upload):</label>
                   <input 
                     type="file" 
                     accept="image/*"
@@ -463,7 +463,7 @@ function Secretaria() {
                     <button
                       type="button"
                       onClick={() => setDadosFormulario(prev => ({ ...prev, fotoUrl: '' }))}
-                      style={{ background: 'none', border: 'none', color: '#dc3545', fontSize: '0.8rem', cursor: 'pointer', display: 'block', marginTop: '5px' }}
+                      className="btn-remover-foto"
                     >
                       ❌ Remover foto
                     </button>

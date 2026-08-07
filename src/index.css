@@ -326,10 +326,15 @@ input, select, textarea {
 [data-theme="dark"] .admin-alerta-box,
 [data-theme="dark"] .login-card,
 [data-theme="dark"] .alterar-senha-card,
+[data-theme="dark"] .foto-upload-box,
 [data-theme="dark"] [style*="background: white"],
 [data-theme="dark"] [style*="background-color: white"] {
   background-color: #0f172a !important;
   border-color: #334155 !important;
+  color: #f8fafc !important;
+}
+
+[data-theme="dark"] .foto-upload-label {
   color: #f8fafc !important;
 }
 
