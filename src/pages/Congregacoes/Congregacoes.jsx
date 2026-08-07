@@ -110,7 +110,10 @@ function Congregacoes() {
           })
           .catch(err => {
             console.error("Erro ao excluir congregação:", err);
-            showToast("Erro ao excluir congregação.", "error");
+            const mensagem = err.response && err.response.data && typeof err.response.data === 'string' 
+              ? err.response.data 
+              : "Erro ao excluir congregação.";
+            showToast(mensagem, "error");
           });
       }
     });

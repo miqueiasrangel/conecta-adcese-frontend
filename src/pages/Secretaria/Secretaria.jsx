@@ -547,13 +547,12 @@ function Secretaria() {
                   <select name="cargo" value={dadosFormulario.cargo || 'Membro'} onChange={lidarComMudanca}>
                     <option value="Membro">Membro</option>
                     <option value="Congregado">Congregado</option>
+                    <option value="Missionário(a)">Missionário(a)</option>
+                    <option value="Auxiliar">Auxiliar</option>
                     <option value="Diácono">Diácono</option>
-                    <option value="Diaconisa">Diaconisa</option>
                     <option value="Presbítero">Presbítero</option>
                     <option value="Evangelista">Evangelista</option>
                     <option value="Pastor">Pastor</option>
-                    <option value="Missionário(a)">Missionário(a)</option>
-                    <option value="Auxiliar">Auxiliar de Trabalho</option>
                   </select>
                 </div>
 
