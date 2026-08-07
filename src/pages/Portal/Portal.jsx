@@ -117,12 +117,16 @@ function Portal() {
   const listaSeguraModulos = Array.isArray(modulos) ? modulos : [];
   const isAdmin = localStorage.getItem('isAdmin') === 'true';
 
-  const modulosFiltrados = listaSeguraModulos
-    .filter(modulo => isAdmin || modulo.rota !== '/controle-acesso')
+  const modulosOrdenados = listaSeguraModulos
+    .filter(modulo => isAdmin || (modulo.rota !== '/controle-acesso' && modulo.rota !== '/logs'))
     .filter(modulo => 
       (modulo.titulo || '').toLowerCase().includes((termoBusca || '').toLowerCase()) ||
       (modulo.descricao || '').toLowerCase().includes((termoBusca || '').toLowerCase())
-    );
+    )
+    .sort((a, b) => (a.titulo || '').localeCompare(b.titulo || ''));
+
+  const modulosAdmin = modulosOrdenados.filter(m => m.rota === '/controle-acesso' || m.rota === '/logs');
+  const modulosComuns = modulosOrdenados.filter(m => m.rota !== '/controle-acesso' && m.rota !== '/logs');
 
   const dataAtualFormatada = new Date().toLocaleDateString('pt-BR', {
     weekday: 'long',
@@ -224,58 +228,86 @@ function Portal() {
 
         {/* LISTAGEM DOS MÓDULOS */}
         <section>
-          <div className="section-header">
-            <h3>
-              Módulos Operacionais 
-              <span className="modulo-count-pill">{modulosFiltrados.length} disponível(is)</span>
-            </h3>
-          </div>
-
-          {modulosFiltrados.length === 0 ? (
+          {modulosOrdenados.length === 0 ? (
             <div className="empty-search-box">
               <p>Nenhum módulo encontrado para a pesquisa "{termoBusca}".</p>
             </div>
           ) : (
-            <div className="modulos-grid">
-              {modulosFiltrados.map(modulo => (
-                <div key={modulo.id} className="modulo-card">
-                  <div className="modulo-top">
-                    <div className="modulo-icone-wrapper">
-                      <RenderizarIcone modulo={modulo} />
-                    </div>
-                    <span className="modulo-status-badge">Ativo</span>
+            <>
+              {modulosComuns.length > 0 && (
+                <>
+                  <div className="section-header">
+                    <h3>
+                      Módulos Operacionais 
+                      <span className="modulo-count-pill">{modulosComuns.length} disponível(is)</span>
+                    </h3>
                   </div>
+                  <div className="modulos-grid">
+                    {modulosComuns.map(modulo => (
+                      <div key={modulo.id} className="modulo-card">
+                        <div className="modulo-top">
+                          <div className="modulo-icone-wrapper">
+                            <RenderizarIcone modulo={modulo} />
+                          </div>
+                          <span className="modulo-status-badge">Ativo</span>
+                        </div>
+                        <h2>{modulo.titulo}</h2>
+                        <p>{modulo.descricao}</p>
+                        <button 
+                          className="acessar-btn"
+                          onClick={() => {
+                            if (modulo.titulo.includes('Secretaria') || modulo.rota === '/membros') navigate('/secretaria');
+                            else if (modulo.titulo.includes('Culto') || modulo.rota === '/cultos') navigate('/cultos');
+                            else if (modulo.titulo.includes('Projeto') || modulo.titulo.includes('Missão') || modulo.rota === '/projetos') navigate('/projetos');
+                            else if (modulo.rota) navigate(modulo.rota);
+                            else if (modulo.titulo.includes('Congrega')) navigate('/congregacoes');
+                            else if (modulo.titulo.includes('Financeiro')) navigate('/financeiro');
+                            else if (modulo.titulo.includes('Gabinete')) navigate('/gabinete');
+                            else alert('Este módulo está em desenvolvimento! Ficará pronto em breve.');
+                          }}
+                        >
+                          Acessar Módulo <FaArrowRight className="arrow-icon" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
 
-                  <h2>{modulo.titulo}</h2>
-                  <p>{modulo.descricao}</p>
-
-                  <button 
-                    className="acessar-btn"
-                    onClick={() => {
-                      if (modulo.titulo.includes('Secretaria') || modulo.rota === '/membros') {
-                        navigate('/secretaria');
-                      } else if (modulo.titulo.includes('Culto') || modulo.rota === '/cultos') {
-                        navigate('/cultos');
-                      } else if (modulo.titulo.includes('Projeto') || modulo.titulo.includes('Missão') || modulo.rota === '/projetos') {
-                        navigate('/projetos');
-                      } else if (modulo.rota) {
-                        navigate(modulo.rota);
-                      } else if (modulo.titulo.includes('Congrega')) {
-                        navigate('/congregacoes');
-                      } else if (modulo.titulo.includes('Financeiro')) {
-                        navigate('/financeiro');
-                      } else if (modulo.titulo.includes('Gabinete')) {
-                        navigate('/gabinete');
-                      } else {
-                        alert('Este módulo está em desenvolvimento! Ficará pronto em breve.');
-                      }
-                    }}
-                  >
-                    Acessar Módulo <FaArrowRight className="arrow-icon" />
-                  </button>
-                </div>
-              ))}
-            </div>
+              {isAdmin && modulosAdmin.length > 0 && (
+                <>
+                  <div className="section-header" style={{ marginTop: '40px' }}>
+                    <h3>
+                      Administração do Sistema
+                      <span className="modulo-count-pill">{modulosAdmin.length} disponível(is)</span>
+                    </h3>
+                  </div>
+                  <div className="modulos-grid">
+                    {modulosAdmin.map(modulo => (
+                      <div key={modulo.id} className="modulo-card">
+                        <div className="modulo-top">
+                          <div className="modulo-icone-wrapper">
+                            <RenderizarIcone modulo={modulo} />
+                          </div>
+                          <span className="modulo-status-badge">Restrito</span>
+                        </div>
+                        <h2>{modulo.titulo}</h2>
+                        <p>{modulo.descricao}</p>
+                        <button 
+                          className="acessar-btn"
+                          onClick={() => {
+                            if (modulo.rota) navigate(modulo.rota);
+                            else alert('Este módulo está em desenvolvimento! Ficará pronto em breve.');
+                          }}
+                        >
+                          Acessar Módulo <FaArrowRight className="arrow-icon" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+            </>
           )}
         </section>
       </main>

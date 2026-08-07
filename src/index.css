@@ -367,7 +367,8 @@ input, select, textarea {
 }
 
 [data-theme="dark"] .membros-tabela tbody tr:hover td,
-[data-theme="dark"] .logs-table tbody tr:hover td {
+[data-theme="dark"] .logs-table tbody tr:hover td,
+[data-theme="dark"] .checkbox-item:hover {
   background-color: #1e293b !important;
 }
 

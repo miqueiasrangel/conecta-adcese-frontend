@@ -47,7 +47,10 @@ function ControleAcesso() {
 
     // Busca todos os módulos do sistema
     api.get('/modulos/todos')
-      .then(res => setModulosTotais(res.data))
+      .then(res => {
+        const sorted = (res.data || []).sort((a,b) => (a.titulo || '').localeCompare(b.titulo || ''));
+        setModulosTotais(sorted);
+      })
       .catch(err => console.error("Erro ao buscar módulos", err));
   };
 
@@ -222,22 +225,51 @@ function ControleAcesso() {
                     </div>
                   </label>
               </div>
-              <h4 style={{marginBottom: '10px', color: '#003366'}}>Módulos Permitidos</h4>
-              <div className="modulos-checkboxes">
-                {modulosTotais.map(modulo => (
-                  <label key={modulo.id} className="checkbox-item">
-                    <input 
-                      type="checkbox" 
-                      checked={modulosMarcados.includes(modulo.id)}
-                      onChange={() => alternarModulo(modulo.id)}
-                    />
-                    <div className="checkbox-texto">
-                      <strong>{modulo.titulo}</strong>
-                      <span>{modulo.descricao}</span>
+              {(() => {
+                const adminMods = modulosTotais.filter(m => m.rota === '/controle-acesso' || m.rota === '/logs');
+                const commonMods = modulosTotais.filter(m => m.rota !== '/controle-acesso' && m.rota !== '/logs');
+                return (
+                  <>
+                    <h4 style={{marginBottom: '10px', color: '#003366'}}>Módulos Comuns Permitidos</h4>
+                    <div className="modulos-checkboxes">
+                      {commonMods.map(modulo => (
+                        <label key={modulo.id} className="checkbox-item">
+                          <input 
+                            type="checkbox" 
+                            checked={modulosMarcados.includes(modulo.id)}
+                            onChange={() => alternarModulo(modulo.id)}
+                          />
+                          <div className="checkbox-texto">
+                            <strong>{modulo.titulo}</strong>
+                            <span>{modulo.descricao}</span>
+                          </div>
+                        </label>
+                      ))}
                     </div>
-                  </label>
-                ))}
-              </div>
+
+                    {usuarioSelecionado.admin && adminMods.length > 0 && (
+                      <>
+                        <h4 style={{marginBottom: '10px', marginTop: '20px', color: '#003366'}}>Módulos Administrativos</h4>
+                        <div className="modulos-checkboxes">
+                          {adminMods.map(modulo => (
+                            <label key={modulo.id} className="checkbox-item">
+                              <input 
+                                type="checkbox" 
+                                checked={modulosMarcados.includes(modulo.id)}
+                                onChange={() => alternarModulo(modulo.id)}
+                              />
+                              <div className="checkbox-texto">
+                                <strong>{modulo.titulo}</strong>
+                                <span>{modulo.descricao}</span>
+                              </div>
+                            </label>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </>
+                );
+              })()}
               <button onClick={salvarPermissoes} className="btn-salvar-permissoes">Salvar Permissões</button>
             </>
           )}
@@ -288,18 +320,41 @@ function ControleAcesso() {
 
               <div className="form-group">
                 <label>Módulos Permitidos Inicialmente:</label>
-                <div className="modal-modulos-list">
-                  {modulosTotais.map(mod => (
-                    <label key={mod.id} className="modal-checkbox-item">
-                      <input 
-                        type="checkbox"
-                        checked={novosModulos.includes(mod.id)}
-                        onChange={() => alternarNovoModulo(mod.id)}
-                      />
-                      <span>{mod.titulo}</span>
-                    </label>
-                  ))}
-                </div>
+                {(() => {
+                  const adminMods = modulosTotais.filter(m => m.rota === '/controle-acesso' || m.rota === '/logs');
+                  const commonMods = modulosTotais.filter(m => m.rota !== '/controle-acesso' && m.rota !== '/logs');
+                  return (
+                    <div className="modal-modulos-list">
+                      <div style={{fontWeight: 'bold', fontSize: '0.8rem', color: '#666', marginTop: '5px'}}>Módulos Comuns</div>
+                      {commonMods.map(mod => (
+                        <label key={mod.id} className="modal-checkbox-item">
+                          <input 
+                            type="checkbox"
+                            checked={novosModulos.includes(mod.id)}
+                            onChange={() => alternarNovoModulo(mod.id)}
+                          />
+                          <span>{mod.titulo}</span>
+                        </label>
+                      ))}
+
+                      {novoAdmin && adminMods.length > 0 && (
+                        <>
+                          <div style={{fontWeight: 'bold', fontSize: '0.8rem', color: '#666', marginTop: '15px'}}>Módulos Administrativos</div>
+                          {adminMods.map(mod => (
+                            <label key={mod.id} className="modal-checkbox-item">
+                              <input 
+                                type="checkbox"
+                                checked={novosModulos.includes(mod.id)}
+                                onChange={() => alternarNovoModulo(mod.id)}
+                              />
+                              <span>{mod.titulo}</span>
+                            </label>
+                          ))}
+                        </>
+                      )}
+                    </div>
+                  );
+                })()}
               </div>
 
               <div className="modal-botoes">
