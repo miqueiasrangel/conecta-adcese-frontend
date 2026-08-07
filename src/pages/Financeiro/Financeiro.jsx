@@ -201,8 +201,7 @@ function Financeiro() {
   };
 
   const usuarioLogado = localStorage.getItem('usuarioLogado') || '';
-  const loginUsuario = localStorage.getItem('loginUsuario') || '';
-  const isAdmin = usuarioLogado.toLowerCase().includes('admin') || loginUsuario.toLowerCase() === 'admin';
+  const isAdmin = localStorage.getItem('isAdmin') === 'true';
 
   const fecharEAtualizarModal = () => {
     setModalAberto(false);

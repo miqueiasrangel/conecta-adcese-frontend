@@ -9,6 +9,7 @@ import Financeiro from './pages/Financeiro/Financeiro';
 import Cultos from './pages/Cultos/Cultos';
 import Projetos from './pages/Projetos/Projetos';
 import Gabinete from './pages/Gabinete/Gabinete';
+import Logs from './pages/Logs/Logs';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/cultos" element={<Cultos />} />
         <Route path="/projetos" element={<Projetos />} />
         <Route path="/gabinete" element={<Gabinete />} />
+        <Route path="/logs" element={<Logs />} />
 
       </Routes>
     </BrowserRouter>

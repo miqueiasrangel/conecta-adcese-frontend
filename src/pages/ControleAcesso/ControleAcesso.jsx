@@ -19,15 +19,14 @@ function ControleAcesso() {
   const [novoLogin, setNovoLogin] = useState('');
   const [novaSenha, setNovaSenha] = useState('');
   const [novosModulos, setNovosModulos] = useState([]);
+  const [novoAdmin, setNovoAdmin] = useState(false);
   const [erroModal, setErroModal] = useState('');
   
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    const usuarioLogado = localStorage.getItem('usuarioLogado') || '';
-    const loginUsuario = localStorage.getItem('loginUsuario') || '';
-    const isAdmin = usuarioLogado.toLowerCase().includes('admin') || loginUsuario.toLowerCase() === 'admin';
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
     if (!token) {
       navigate('/login');
       return;
@@ -72,14 +71,20 @@ function ControleAcesso() {
   const salvarPermissoes = () => {
     if (!usuarioSelecionado) return;
 
-    api.put(`/usuarios/${usuarioSelecionado.id}/permissoes`, modulosMarcados)
+    Promise.all([
+      api.put(`/usuarios/${usuarioSelecionado.id}/permissoes`, modulosMarcados),
+      api.put(`/usuarios/${usuarioSelecionado.id}/admin`, { admin: !!usuarioSelecionado.admin })
+    ])
       .then(() => {
-        showToast("Permissões salvas com sucesso!", "success");
+        showToast("Configurações salvas com sucesso!", "success");
         carregarDados();
       })
       .catch(err => {
         console.error("Erro ao salvar", err);
-        showToast(err.response?.data || "Erro ao salvar permissões.", "error");
+        const msg = typeof err.response?.data === 'string' 
+          ? err.response.data 
+          : (err.response?.data?.message || "Erro ao salvar configurações.");
+        showToast(msg, "error");
       });
   };
 
@@ -87,6 +92,7 @@ function ControleAcesso() {
   const abrirModalNovoUsuario = () => {
     setNovoLogin('');
     setNovaSenha('');
+    setNovoAdmin(false);
     setNovosModulos(modulosTotais.map(m => m.id)); // Por padrão, seleciona todos os módulos
     setErroModal('');
     setModalNovoUsuario(true);
@@ -110,7 +116,8 @@ function ControleAcesso() {
     api.post('/usuarios', {
       login: novoLogin.trim(),
       senha: novaSenha.trim(),
-      modulosIds: novosModulos
+      modulosIds: novosModulos,
+      admin: novoAdmin
     })
     .then(res => {
       showToast("Usuário cadastrado com sucesso!", "success");
@@ -120,7 +127,10 @@ function ControleAcesso() {
     })
     .catch(err => {
       console.error("Erro ao cadastrar usuário", err);
-      setErroModal(err.response?.data || "Erro ao cadastrar usuário.");
+      const msg = typeof err.response?.data === 'string' 
+        ? err.response.data 
+        : (err.response?.data?.message || "Erro ao cadastrar usuário.");
+      setErroModal(msg);
     });
   };
 
@@ -143,7 +153,10 @@ function ControleAcesso() {
           })
           .catch(err => {
             console.error("Erro ao excluir usuário", err);
-            showToast(err.response?.data || "Erro ao excluir usuário.", "error");
+            const msg = typeof err.response?.data === 'string' 
+              ? err.response.data 
+              : (err.response?.data?.message || "Erro ao excluir usuário.");
+            showToast(msg, "error");
           });
       }
     });
@@ -172,7 +185,10 @@ function ControleAcesso() {
                 onClick={() => selecionarUsuario(user)}
                 className={`usuario-item ${usuarioSelecionado?.id === user.id ? 'selecionado' : ''}`}
               >
-                <span className="usuario-info"><FaUser style={{ color: '#003366' }} /> {user.login}</span>
+                <span className="usuario-info">
+                  <FaUser style={{ color: '#003366' }} /> {user.login}
+                  {user.admin && <span style={{marginLeft: '8px', fontSize: '10px', background: '#003366', color: 'white', padding: '2px 6px', borderRadius: '4px'}}>Admin</span>}
+                </span>
                 <ActionMenu actions={[
                   { label: 'Excluir Usuário', icon: <FaTrashAlt />, danger: true, onClick: () => handleExcluirUsuario(user, { stopPropagation: () => {} }) },
                 ]} />
@@ -188,8 +204,22 @@ function ControleAcesso() {
           ) : (
             <>
               <div className="painel-header">
-                <h3>Permissões de: <span>{usuarioSelecionado.login}</span></h3>
+                <h3>Configurações de: <span>{usuarioSelecionado.login}</span></h3>
               </div>
+              <div style={{marginBottom: '20px', padding: '15px', background: '#f5f7fa', borderRadius: '8px'}}>
+                 <label className="checkbox-item" style={{margin: 0}}>
+                    <input 
+                      type="checkbox" 
+                      checked={!!usuarioSelecionado.admin}
+                      onChange={(e) => setUsuarioSelecionado({...usuarioSelecionado, admin: e.target.checked})}
+                    />
+                    <div className="checkbox-texto">
+                      <strong>Acesso de Administrador (Total)</strong>
+                      <span>Se marcado, este usuário terá permissões irrestritas no sistema.</span>
+                    </div>
+                  </label>
+              </div>
+              <h4 style={{marginBottom: '10px', color: '#003366'}}>Módulos Permitidos</h4>
               <div className="modulos-checkboxes">
                 {modulosTotais.map(modulo => (
                   <label key={modulo.id} className="checkbox-item">
@@ -227,6 +257,19 @@ function ControleAcesso() {
                   placeholder="Ex: joao.silva"
                   required
                 />
+              </div>
+
+              <div className="form-group" style={{marginBottom: '20px', padding: '10px', background: '#f5f7fa', borderRadius: '8px'}}>
+                 <label className="checkbox-item" style={{margin: 0, display: 'flex', gap: '10px'}}>
+                    <input 
+                      type="checkbox" 
+                      checked={novoAdmin}
+                      onChange={(e) => setNovoAdmin(e.target.checked)}
+                    />
+                    <div className="checkbox-texto" style={{textAlign: 'left'}}>
+                      <strong>Tornar Administrador</strong>
+                    </div>
+                  </label>
               </div>
 
               <div className="form-group">

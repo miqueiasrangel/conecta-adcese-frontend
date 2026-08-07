@@ -115,8 +115,7 @@ function Portal() {
   };
 
   const listaSeguraModulos = Array.isArray(modulos) ? modulos : [];
-  const loginUsuario = localStorage.getItem('loginUsuario') || '';
-  const isAdmin = usuarioLogado.toLowerCase().includes('admin') || loginUsuario.toLowerCase() === 'admin';
+  const isAdmin = localStorage.getItem('isAdmin') === 'true';
 
   const modulosFiltrados = listaSeguraModulos
     .filter(modulo => isAdmin || modulo.rota !== '/controle-acesso')

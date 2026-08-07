@@ -1,0 +1,53 @@
+.logs-wrapper {
+  background-color: var(--background-color, #f4f6f8);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.logs-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.logs-content {
+  background-color: var(--card-bg, #ffffff);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.logs-table-wrapper {
+  overflow-x: auto;
+}
+
+.logs-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.logs-table th {
+  text-align: left;
+  padding: 12px;
+  background-color: var(--table-header-bg, #f8f9fa);
+  color: var(--text-color, #333);
+  border-bottom: 2px solid #e1e4e8;
+  font-weight: 600;
+}
+
+.logs-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border-color, #eee);
+  color: var(--text-color, #555);
+}
+
+.log-acao-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  background-color: #003366;
+  color: white;
+}

@@ -19,10 +19,12 @@ function Login() {
       .then(resposta => {
         const token = resposta.data.token;
         const usuario = resposta.data.nomeUsuario || login;
+        const isAdmin = resposta.data.admin || login.toLowerCase() === 'admin';
         localStorage.setItem('token', token);
         localStorage.setItem('usuarioLogado', usuario);
         localStorage.setItem('loginUsuario', login);
-        window.location.href = '/painel'; 
+        localStorage.setItem('isAdmin', isAdmin ? 'true' : 'false');
+        window.location.href = '/painel';
       })
       .catch(() => {
         setCarregando(false);
