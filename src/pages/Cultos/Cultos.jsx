@@ -42,7 +42,7 @@ function Cultos() {
     data: new Date().toISOString().split('T')[0],
     horarioInicio: '19:00',
     horarioFim: '21:00',
-    congregacao: 'Sede',
+    congregacao: '',
     tipoCulto: 'Culto de Domingo',
     preletor: '',
     tema: '',
@@ -397,7 +397,6 @@ function Cultos() {
             <label>🏢 Congregação:</label>
             <select value={congregacaoFiltro} onChange={e => setCongregacaoFiltro(e.target.value)} className="filtro-select">
               <option value="TODAS">Todas (Consolidado)</option>
-              <option value="Sede">Congregação Sede</option>
               {congregacoes.map(c => (
                 <option key={c.id} value={c.nome}>{c.nome}</option>
               ))}
@@ -574,8 +573,9 @@ function Cultos() {
                   <select 
                     value={formCulto.congregacao} 
                     onChange={e => setFormCulto({ ...formCulto, congregacao: e.target.value })}
+                    required
                   >
-                    <option value="Sede">Congregação Sede</option>
+                    <option value="">Selecione a congregação...</option>
                     {congregacoes.map(c => (
                       <option key={c.id} value={c.nome}>{c.nome}</option>
                     ))}

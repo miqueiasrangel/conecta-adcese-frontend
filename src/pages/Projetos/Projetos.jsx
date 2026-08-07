@@ -35,7 +35,7 @@ function Projetos() {
     titulo: '',
     descricao: '',
     tipo: 'Assistência Social',
-    congregacao: 'Sede',
+    congregacao: '',
     coordenador: '',
     dataInicio: new Date().toISOString().split('T')[0],
     dataFim: '',
@@ -345,7 +345,6 @@ function Projetos() {
             <label>🏢 Congregação Responsável:</label>
             <select value={filtroCongregacao} onChange={e => setFiltroCongregacao(e.target.value)} className="filtro-select">
               <option value="">Todas (Consolidado)</option>
-              <option value="Sede">Congregação Sede</option>
               {congregacoes.map(c => (
                 <option key={c.id} value={c.nome}>{c.nome}</option>
               ))}
@@ -399,7 +398,7 @@ function Projetos() {
 
                   <div style={{ fontSize: '0.85rem', color: '#475569', marginBottom: '10px' }}>
                     <span>👤 <strong>Coordenador:</strong> {proj.coordenador || 'A definir'}</span><br/>
-                    <span>🏢 <strong>Congregação:</strong> {proj.congregacao || 'Sede'}</span>
+                    <span>🏢 <strong>Congregação:</strong> {proj.congregacao || '-'}</span>
                   </div>
 
                   {/* BARRA DE PROGRESSO FINANCEIRO */}
@@ -500,8 +499,9 @@ function Projetos() {
                   <select 
                     value={formProjeto.congregacao} 
                     onChange={e => setFormProjeto({ ...formProjeto, congregacao: e.target.value })}
+                    required
                   >
-                    <option value="Sede">Congregação Sede</option>
+                    <option value="">Selecione a congregação...</option>
                     {congregacoes.map(c => (
                       <option key={c.id} value={c.nome}>{c.nome}</option>
                     ))}

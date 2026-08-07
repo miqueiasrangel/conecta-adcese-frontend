@@ -64,7 +64,7 @@ function Secretaria() {
     telefone: '',
     dataNascimento: '',
     cargo: 'Membro',
-    congregacao: 'Sede',
+    congregacao: '',
     dataBatismo: '',
     status: 'Ativo',
     fotoUrl: '',
@@ -328,7 +328,6 @@ function Secretaria() {
           style={{ flex: '1', minWidth: '170px', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}
         >
           <option value="">Todas as Congregações</option>
-          <option value="Sede">Congregação Sede</option>
           {congregacoes.map(c => (
             <option key={c.id} value={c.nome}>{c.nome}</option>
           ))}
@@ -391,7 +390,7 @@ function Secretaria() {
                       </div>
                     </td>
                     <td><strong>{membro.chapa || '-'}</strong></td>
-                    <td>{membro.congregacao || 'Sede'}</td>
+                    <td>{membro.congregacao || '-'}</td>
                     <td>{membro.cargo || 'Membro'}</td>
                     <td>{membro.telefone || '-'}</td>
                     <td>
@@ -558,8 +557,8 @@ function Secretaria() {
 
                 <div className="form-grupo">
                   <label>Congregação *</label>
-                  <select name="congregacao" value={dadosFormulario.congregacao || 'Sede'} onChange={lidarComMudanca}>
-                    <option value="Sede">Congregação Sede</option>
+                  <select name="congregacao" value={dadosFormulario.congregacao || ''} onChange={lidarComMudanca} required>
+                    <option value="">Selecione a congregação...</option>
                     {congregacoes.map(c => (
                       <option key={c.id} value={c.nome}>{c.nome}</option>
                     ))}
@@ -627,7 +626,6 @@ function Secretaria() {
                   style={{ padding: '8px 12px', borderRadius: '5px', border: '1px solid #003366', fontWeight: 'bold', color: '#003366', background: '#f0f7ff' }}
                 >
                   <option value="">🏢 Todas as Congregações (Consolidado)</option>
-                  <option value="Sede">Congregação Sede</option>
                   {congregacoes.map(c => (
                     <option key={c.id} value={c.nome}>{c.nome}</option>
                   ))}
@@ -710,7 +708,7 @@ function Secretaria() {
                       <td><strong>{membro.chapa || '-'}</strong></td>
                       <td>{membro.nome}</td>
                       <td>{membro.cargo || 'Membro'}</td>
-                      <td>{membro.congregacao || 'Sede'}</td>
+                      <td>{membro.congregacao || '-'}</td>
                       {tipoRelatorio === 'ANIVERSARIANTES' ? (
                         <>
                           <td><strong>🎂 {formatarData(membro.dataNascimento)}</strong></td>
@@ -796,7 +794,7 @@ function Secretaria() {
                   </p>
                   <p>Chapa: <strong>{membroSelecionadoCredencial.chapa || 'M-000'}</strong></p>
                   <p>Cargo: <strong>{membroSelecionadoCredencial.cargo || 'Membro'}</strong></p>
-                  <p>Congregação: <strong>{membroSelecionadoCredencial.congregacao || 'Sede'}</strong></p>
+                  <p>Congregação: <strong>{membroSelecionadoCredencial.congregacao || '-'}</strong></p>
                   <p>Batismo: <strong>{formatarData(membroSelecionadoCredencial.dataBatismo)}</strong></p>
                 </div>
               </div>
