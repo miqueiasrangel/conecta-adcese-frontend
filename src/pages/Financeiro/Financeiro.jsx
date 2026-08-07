@@ -157,11 +157,13 @@ function Financeiro() {
         membro: item.membroId ? { id: parseInt(item.membroId) } : null
       }));
 
+      const totalLoteCalculado = itensEntrada.reduce((acc, curr) => acc + (parseFloat(curr.valor) || 0), 0);
+
       api.post('/lancamentos/lote', lote)
         .then(() => {
           showToast(`Lote com ${itensEntrada.length} entrada(s) registrado com sucesso!`, "success");
           const resumoItens = itensEntrada.map(i => `${i.categoria || 'Entrada'}: R$ ${Number(i.valor || 0).toFixed(2)} (${i.formaPagamento})`).join('; ');
-          registrarLog('Financeiro', 'NOVO_LANCAMENTO', `Registrada entrada em lote (${itensEntrada.length} item/itens) totalizando R$ ${totalLote.toFixed(2)}: [${resumoItens}]`);
+          registrarLog('Financeiro', 'NOVO_LANCAMENTO', `Registrada entrada em lote (${itensEntrada.length} item/itens) totalizando R$ ${totalLoteCalculado.toFixed(2)}: [${resumoItens}]`);
           fecharEAtualizarModal();
         })
         .catch(err => {
