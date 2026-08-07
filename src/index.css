@@ -320,6 +320,8 @@ input, select, textarea {
 [data-theme="dark"] .metricas-card-culto,
 [data-theme="dark"] .item-lote-linha,
 [data-theme="dark"] .carteirinha-qr,
+[data-theme="dark"] .logs-content,
+[data-theme="dark"] .alerta-evasao-box,
 [data-theme="dark"] [style*="background: white"],
 [data-theme="dark"] [style*="background-color: white"] {
   background-color: #0f172a !important;
@@ -347,18 +349,21 @@ input, select, textarea {
   color: #94a3b8;
 }
 
-[data-theme="dark"] .membros-tabela th {
+[data-theme="dark"] .membros-tabela th,
+[data-theme="dark"] .logs-table th {
   background-color: #1e293b !important;
   color: #cbd5e1 !important;
   border-bottom-color: #334155 !important;
 }
 
-[data-theme="dark"] .membros-tabela td {
+[data-theme="dark"] .membros-tabela td,
+[data-theme="dark"] .logs-table td {
   color: #e2e8f0 !important;
   border-bottom-color: #1e293b !important;
 }
 
-[data-theme="dark"] .membros-tabela tbody tr:hover td {
+[data-theme="dark"] .membros-tabela tbody tr:hover td,
+[data-theme="dark"] .logs-table tbody tr:hover td {
   background-color: #1e293b !important;
 }
 
