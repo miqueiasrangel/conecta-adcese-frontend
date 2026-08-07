@@ -209,7 +209,7 @@ function ControleAcesso() {
               <div className="painel-header">
                 <h3>Configurações de: <span>{usuarioSelecionado.login}</span></h3>
               </div>
-              <div style={{marginBottom: '20px', padding: '15px', background: '#f5f7fa', borderRadius: '8px'}}>
+              <div className="admin-alerta-box" style={{marginBottom: '20px', padding: '15px', background: '#f5f7fa', borderRadius: '8px'}}>
                  <label className="checkbox-item" style={{margin: 0}}>
                     <input 
                       type="checkbox" 

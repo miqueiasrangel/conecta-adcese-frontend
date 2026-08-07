@@ -322,6 +322,10 @@ input, select, textarea {
 [data-theme="dark"] .carteirinha-qr,
 [data-theme="dark"] .logs-content,
 [data-theme="dark"] .alerta-evasao-box,
+[data-theme="dark"] .usuario-item,
+[data-theme="dark"] .admin-alerta-box,
+[data-theme="dark"] .login-card,
+[data-theme="dark"] .alterar-senha-card,
 [data-theme="dark"] [style*="background: white"],
 [data-theme="dark"] [style*="background-color: white"] {
   background-color: #0f172a !important;
