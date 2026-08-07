@@ -365,6 +365,15 @@ input, select, textarea {
   color: #38bdf8 !important;
 }
 
+[data-theme="dark"] .btn-ver-detalhes {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .btn-ver-detalhes:hover {
+  background-color: #3b82f6 !important;
+}
+
 [data-theme="dark"] .foto-upload-label {
   color: #f8fafc !important;
 }

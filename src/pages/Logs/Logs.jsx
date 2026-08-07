@@ -59,14 +59,13 @@ function Logs() {
                   <th>Módulo</th>
                   <th>Usuário</th>
                   <th>Ação</th>
-                  <th>Resumo dos Detalhes</th>
-                  <th style={{ textAlign: 'center' }}>Visualizar</th>
+                  <th style={{ textAlign: 'center' }}>Detalhes</th>
                 </tr>
               </thead>
               <tbody>
                 {logsFiltrados.length === 0 ? (
                   <tr>
-                    <td colSpan="6" style={{textAlign: 'center', padding: '20px'}}>Nenhum log operacional registrado.</td>
+                    <td colSpan="5" style={{textAlign: 'center', padding: '20px'}}>Nenhum log operacional registrado.</td>
                   </tr>
                 ) : (
                   logsFiltrados.map(log => (
@@ -75,13 +74,9 @@ function Logs() {
                       <td><strong>{log.modulo || 'Geral'}</strong></td>
                       <td><strong>{log.usuarioLogin}</strong></td>
                       <td><span className="log-acao-badge">{log.acao}</span></td>
-                      <td style={{ maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                        {log.detalhes}
-                      </td>
                       <td style={{ textAlign: 'center' }}>
                         <button 
-                          className="nav-btn" 
-                          style={{ padding: '4px 10px', fontSize: '0.8rem' }}
+                          className="btn-ver-detalhes"
                           onClick={(e) => {
                             e.stopPropagation();
                             setLogSelecionado(log);
