@@ -382,22 +382,21 @@ function Financeiro() {
       <NavbarHeader 
         tituloModulo="Gestão Financeira"
         descricaoModulo="Dízimos, Ofertas, Saldos Em Mão e Na Conta, Saídas e Relatórios Financeiros"
-        botoesAcao={
-          <>
-            <button 
-              onClick={() => setModalRelatorioAberto(true)} 
-              style={{ backgroundColor: '#003366', color: 'white', border: '1px solid rgba(255,255,255,0.3)', padding: '10px 16px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
-            >
-              📄 Relatório PDF / Impressão
-            </button>
-            <button onClick={() => setModalAberto(true)} className="btn-novo">➕ Novo Lançamento</button>
-          </>
-        }
       />
 
       <div className="financeiro-container">
+        {/* BARRA DE AÇÕES DO MÓDULO */}
+        <div className="modulo-acoes-bar" style={{ display: 'flex', justifyContent: 'flex-end', gap: '15px', marginBottom: '20px' }}>
+          <button 
+            onClick={() => setModalRelatorioAberto(true)} 
+            style={{ backgroundColor: '#003366', color: 'white', border: '1px solid rgba(255,255,255,0.3)', padding: '10px 16px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
+          >
+            📄 Relatório PDF / Impressão
+          </button>
+          <button onClick={() => setModalAberto(true)} className="btn-novo">➕ Novo Lançamento</button>
+        </div>
 
-      {/* BARRA DE FILTROS: CONGREGAÇÃO, MÊS, ANO E BUSCA */}
+        {/* BARRA DE FILTROS: CONGREGAÇÃO, MÊS, ANO E BUSCA */}
       <section className="filtro-bar">
         <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', alignItems: 'center', width: '100%' }}>
           <div className="filtro-grupo" style={{ flex: '1.5', minWidth: '220px' }}>

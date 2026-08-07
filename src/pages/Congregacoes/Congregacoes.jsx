@@ -121,12 +121,13 @@ function Congregacoes() {
       <NavbarHeader 
         tituloModulo="Gestão de Congregações"
         descricaoModulo="Cadastre e gerencie as congregações do campo ADCESE e os dirigentes de campo"
-        botoesAcao={
-          <button onClick={abrirModalNovo} className="btn-novo">➕ Nova Congregação</button>
-        }
       />
 
       <div className="secretaria-container">
+        {/* BARRA DE AÇÕES DO MÓDULO */}
+        <div className="modulo-acoes-bar" style={{ display: 'flex', justifyContent: 'flex-end', gap: '15px', marginBottom: '20px' }}>
+          <button onClick={abrirModalNovo} className="btn-novo">➕ Nova Congregação</button>
+        </div>
 
       <main className="tabela-container">
         {congregacoes.length === 0 ? (

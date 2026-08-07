@@ -291,25 +291,24 @@ function Projetos() {
       <NavbarHeader 
         tituloModulo="Projetos Sociais e Missões"
         descricaoModulo="Gestão de Campanhas de Arrecadação, Doações de Itens e Métricas de Impacto Social"
-        botoesAcao={
-          <>
-            <button 
-              onClick={() => setModalTelaoAberto(true)} 
-              style={{ backgroundColor: '#003366', color: 'white', border: '1px solid rgba(255,255,255,0.3)', padding: '10px 16px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
-            >
-              📊 Apresentação para Telão (Culto de Missões)
-            </button>
-            <button 
-              onClick={() => { setFormProjeto(estadoInicialProjeto); setModalProjetoAberto(true); }} 
-              className="btn-novo"
-            >
-              ➕ Nova Campanha / Projeto
-            </button>
-          </>
-        }
       />
 
       <div className="projetos-container">
+        {/* BARRA DE AÇÕES DO MÓDULO */}
+        <div className="modulo-acoes-bar" style={{ display: 'flex', justifyContent: 'flex-end', gap: '15px', marginBottom: '20px' }}>
+          <button 
+            onClick={() => setModalTelaoAberto(true)} 
+            style={{ backgroundColor: '#003366', color: 'white', border: '1px solid rgba(255,255,255,0.3)', padding: '10px 16px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
+          >
+            📊 Apresentação para Telão (Culto de Missões)
+          </button>
+          <button 
+            onClick={() => { setFormProjeto(estadoInicialProjeto); setModalProjetoAberto(true); }} 
+            className="btn-novo"
+          >
+            ➕ Nova Campanha / Projeto
+          </button>
+        </div>
 
       {/* DASHBOARD DE IMPACTO SOCIAL */}
       <section className="impacto-grid">

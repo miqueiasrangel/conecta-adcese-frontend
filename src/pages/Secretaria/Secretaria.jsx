@@ -276,28 +276,27 @@ function Secretaria() {
       <NavbarHeader 
         tituloModulo="Secretaria e Rol de Membros"
         descricaoModulo={`Gestão do Rol de Membros, Credenciais com QR Code, Aniversariantes e Emissão de Certidões (${totalElementos} cadastrados)`}
-        botoesAcao={
-          <>
-            <button 
-              onClick={() => abrirModalRelatorio('ANIVERSARIANTES')}
-              style={{ backgroundColor: '#d4af37', color: '#002244', border: 'none', padding: '10px 16px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
-            >
-              🎂 Aniversariantes do Mês
-            </button>
-            <button 
-              onClick={() => abrirModalRelatorio('SANTA_CEIA')} 
-              style={{ backgroundColor: '#003366', color: 'white', border: '1px solid rgba(255,255,255,0.3)', padding: '10px 16px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
-            >
-              📄 Relatório / Rol de Membros
-            </button>
-            <button onClick={abrirModalNovo} className="btn-novo">➕ Novo Membro</button>
-          </>
-        }
       />
 
       <div className="secretaria-container">
+        {/* BARRA DE AÇÕES DO MÓDULO */}
+        <div className="modulo-acoes-bar" style={{ display: 'flex', justifyContent: 'flex-end', gap: '15px', marginBottom: '20px' }}>
+          <button 
+            onClick={() => abrirModalRelatorio('ANIVERSARIANTES')}
+            style={{ backgroundColor: '#d4af37', color: '#002244', border: 'none', padding: '10px 16px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
+          >
+            🎂 Aniversariantes do Mês
+          </button>
+          <button 
+            onClick={() => abrirModalRelatorio('SANTA_CEIA')} 
+            style={{ backgroundColor: '#003366', color: 'white', border: '1px solid rgba(255,255,255,0.3)', padding: '10px 16px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
+          >
+            📄 Relatório / Rol de Membros
+          </button>
+          <button onClick={abrirModalNovo} className="btn-novo">➕ Novo Membro</button>
+        </div>
 
-      {/* PAINEL DE FILTROS E BUSCA AVANÇADA */}
+        {/* PAINEL DE FILTROS E BUSCA AVANÇADA */}
       <div className="filtros-container" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '20px', background: 'white', padding: '18px', borderRadius: '8px', boxShadow: '0 2px 5px rgba(0,0,0,0.05)' }}>
         <input 
           type="text"

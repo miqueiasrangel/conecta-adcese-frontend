@@ -5,6 +5,7 @@ import './ActionMenu.css';
 function ActionMenu({ actions = [] }) {
   const [aberto, setAberto] = useState(false);
   const [abrirParaCima, setAbrirParaCima] = useState(false);
+  const [posicao, setPosicao] = useState({ top: 'auto', bottom: 'auto', right: 0 });
   const menuRef = useRef(null);
 
   useEffect(() => {
@@ -15,9 +16,11 @@ function ActionMenu({ actions = [] }) {
     }
     if (aberto) {
       document.addEventListener('mousedown', handleClickFora);
+      window.addEventListener('scroll', () => setAberto(false), true);
     }
     return () => {
       document.removeEventListener('mousedown', handleClickFora);
+      window.removeEventListener('scroll', () => setAberto(false), true);
     };
   }, [aberto]);
 
@@ -28,8 +31,14 @@ function ActionMenu({ actions = [] }) {
     if (!aberto && menuRef.current) {
       const rect = menuRef.current.getBoundingClientRect();
       const espacoAbaixo = window.innerHeight - rect.bottom;
-      // Se houver menos de 170px livres abaixo, abre o menu para cima
-      setAbrirParaCima(espacoAbaixo < 170);
+      const abreParaCima = espacoAbaixo < 250;
+      setAbrirParaCima(abreParaCima);
+      
+      setPosicao({
+        top: abreParaCima ? 'auto' : rect.bottom + 4,
+        bottom: abreParaCima ? (window.innerHeight - rect.top) + 4 : 'auto',
+        right: window.innerWidth - rect.right
+      });
     }
     setAberto(!aberto);
   };
@@ -46,7 +55,10 @@ function ActionMenu({ actions = [] }) {
       </button>
 
       {aberto && (
-        <div className={`action-menu-dropdown ${abrirParaCima ? 'open-up' : ''}`}>
+        <div 
+          className={`action-menu-dropdown ${abrirParaCima ? 'open-up' : ''}`}
+          style={{ position: 'fixed', top: posicao.top, bottom: posicao.bottom, right: posicao.right, zIndex: 999999 }}
+        >
           {actions.map((action, idx) => (
             <button
               key={idx}

@@ -357,31 +357,30 @@ function Cultos() {
       <NavbarHeader 
         tituloModulo="Gestão de Cultos e Escalas"
         descricaoModulo="Liturgia, Organização de Equipes por Departamento e Calendário Mensal"
-        botoesAcao={
-          <>
-            <button 
-              onClick={() => setModalImprimirCalendarioAberto(true)} 
-              style={{ backgroundColor: '#d4af37', color: '#002244', border: 'none', padding: '10px 16px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
-            >
-              🗓️ Imprimir Calendário
-            </button>
-            <button 
-              onClick={() => setModalExportarEscalaAberto(true)} 
-              style={{ backgroundColor: '#003366', color: 'white', border: '1px solid rgba(255,255,255,0.3)', padding: '10px 16px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
-            >
-              📄 Exportar Escala em PDF
-            </button>
-            <button 
-              onClick={() => { setFormCulto(estadoInicialCulto); setModalCultoAberto(true); }} 
-              className="btn-novo"
-            >
-              ➕ Agendar Novo Culto
-            </button>
-          </>
-        }
       />
 
       <div className="cultos-container">
+        {/* BARRA DE AÇÕES DO MÓDULO */}
+        <div className="modulo-acoes-bar" style={{ display: 'flex', justifyContent: 'flex-end', gap: '15px', marginBottom: '20px' }}>
+          <button 
+            onClick={() => setModalImprimirCalendarioAberto(true)} 
+            style={{ backgroundColor: '#d4af37', color: '#002244', border: 'none', padding: '10px 16px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
+          >
+            🗓️ Imprimir Calendário
+          </button>
+          <button 
+            onClick={() => setModalExportarEscalaAberto(true)} 
+            style={{ backgroundColor: '#003366', color: 'white', border: '1px solid rgba(255,255,255,0.3)', padding: '10px 16px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
+          >
+            📄 Exportar Escala em PDF
+          </button>
+          <button 
+            onClick={() => { setFormCulto(estadoInicialCulto); setModalCultoAberto(true); }} 
+            className="btn-novo"
+          >
+            ➕ Novo Culto / Reunião
+          </button>
+        </div>
 
       {/* CARD DE RESUMO */}
       <section className="metricas-grid-cultos" style={{ gridTemplateColumns: '1fr' }}>

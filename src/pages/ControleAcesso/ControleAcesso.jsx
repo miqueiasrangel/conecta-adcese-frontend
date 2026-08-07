@@ -235,7 +235,7 @@ function ControleAcesso() {
                   </label>
                 ))}
               </div>
-              <button onClick={salvarPermissoes} className="btn-salvar">Salvar Permissões</button>
+              <button onClick={salvarPermissoes} className="btn-salvar-permissoes">Salvar Permissões</button>
             </>
           )}
         </div>
@@ -299,9 +299,9 @@ function ControleAcesso() {
                 </div>
               </div>
 
-              <div className="modal-acoes">
+              <div className="modal-botoes">
                 <button type="button" onClick={() => setModalNovoUsuario(false)} className="btn-cancelar">Cancelar</button>
-                <button type="submit" className="btn-confirmar">Cadastrar Usuário</button>
+                <button type="submit" className="btn-salvar">Cadastrar Usuário</button>
               </div>
             </form>
           </div>
